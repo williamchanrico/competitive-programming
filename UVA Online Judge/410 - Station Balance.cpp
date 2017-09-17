@@ -1,55 +1,57 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 int main(){
-	// freopen("in.txt", "r", stdin);
-	int set = 1;
-	int inputC;
-	int inputS;
+	int T = 1, C, S;
 
-	while(scanf("%d %d", &inputC, &inputS) != EOF){
-		std::vector<int> v(1);
+	while(scanf("%d %d", &C, &S) != EOF){
+		int inp;
+		vector<int> v;
+		vector<vector<int> > chamber(C);
 
-		for(int a = 0; a < inputS; a++){
-			scanf("%d", &v[0]);
-			v.push_back(v[0]);
+		for(int a = 0; a < S; a++){
+			scanf("%d", &inp);
+
+			v.push_back(inp);
 		}
 
-		for(int a = 0; a < (inputC * 2) - inputS; a++)
+		for(int a = 0; a < (2 * C) - S; a++)
 			v.push_back(0);
 
-		std::sort(v.begin() + 1, v.end());
+		int sum = accumulate(v.begin(), v.end(), 0);
 
-		int idx = 0;
-		double imbalance = 0;
-		double totalMass = 0;
-		std::vector<std::vector<int> > ans(inputC);
+		double A = (double) sum / C;
 
-		for(int a = 1, len = v.size(); a < len; a++)
-			totalMass += v[a];
+		sort(v.begin(), v.end());
 
-		double averageMass = totalMass / inputC;
-
-		for(int a = 1, b = inputC * 2; a < b; a++, b--){
-			if(v[a] != 0) ans[idx].push_back(v[a]);
-			if(v[b] != 0) ans[idx].push_back(v[b]);
-			idx = (idx + 1) % inputC;
+		for(int a = 0, b = v.size() - 1; a <= b; a++, b--){
+			if(v[a] != 0)
+				chamber[a % C].push_back(v[a]);
+			if(v[b] != 0)
+				chamber[a % C].push_back(v[b]);
 		}
 
-		for(int a = 0; a < inputC; a++){
-			totalMass = 0;
-			for(int b = 0, len = ans[a].size(); b < len; b++)
-				totalMass += ans[a][b];
-			imbalance += fabs(totalMass - averageMass);
+		double ans = 0;
+
+		for(int a = 0; a < chamber.size(); a++){
+			double sum = 0;
+
+			for(int b = 0; b < chamber[a].size(); b++)
+				sum += chamber[a][b];
+
+			ans += fabs(sum - A);
 		}
 
-		printf("Set #%d\n", set++);
+		printf("Set #%d\n", T++);
 
-		for(int a = 0; a < inputC; a++){
+		for(int a = 0; a < chamber.size(); a++){
 			printf(" %d:", a);
-			for(int b = 0, len = ans[a].size(); b < len; b++)
-				printf(" %d", ans[a][b]);
+
+			for(int b = 0; b < chamber[a].size(); b++)
+				printf(" %d", chamber[a][b]);
 			printf("\n");
 		}
-		printf("IMBALANCE = %.05lf\n\n", imbalance);
+
+		printf("IMBALANCE = %.5lf\n\n", ans);
 	}
 }

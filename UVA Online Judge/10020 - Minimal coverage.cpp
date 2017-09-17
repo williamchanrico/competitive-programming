@@ -1,55 +1,70 @@
 #include <bits/stdc++.h>
+using namespace std;
+
+class Line{
+public:
+	int left;
+	int right;
+};
+
+bool cmp(const Line &x, const Line &y){
+	if(x.left == y.left)
+		return x.right > y.right;
+	return x.left < y.left;
+}
 
 int main(){
-	// freopen("in.txt", "r", stdin);
 	int T;
 
 	scanf("%d", &T);
 
 	while(T--){
-		int inputM;
-		int inputL;
-		int inputR;
-		std::vector<std::pair<int, int> > v;
+		int M;
+		Line line;
+		vector<Line> v;
 
-		scanf("%d", &inputM);
+		scanf("%d", &M);
 
-		while(scanf("%d %d", &inputL, &inputR) && inputL | inputR){
-			v.push_back(std::make_pair(inputL, inputR));
+		while(scanf("%d %d", &line.left, &line.right), (line.left | line.right)){
+			v.push_back(line);
 		}
 
-		std::sort(v.begin(), v.end());
+		sort(v.begin(), v.end(), cmp);
 
-		std::vector<std::pair<int, int> > vAns;
 		int reached = 0;
+		vector<Line> vAns;
 
-		while(reached < inputM){
+		while(reached < M){
 			int newReached = reached;
-			int newSegmentIdx = -1;
+			int newLineIdx = -1;
 
-			for(int a = 0, len = v.size(); a < len; a++){
-				if(v[a].first > reached) break;
+			for(int a = 0; a < v.size(); a++){
+				if(v[a].left > reached)
+					break;
 
-				if(v[a].second > newReached){
-					newReached = v[a].second;
-					newSegmentIdx = a;
+				if(v[a].right > newReached){
+					newReached = v[a].right;
+					newLineIdx = a;
 				}
 			}
 
-			if(newSegmentIdx == -1) break;
+			if(reached == newReached)
+				break;
+
 			reached = newReached;
-			vAns.push_back(v[newSegmentIdx]);
+
+			vAns.push_back(v[newLineIdx]);
 		}
 
-		if(reached < inputM){
+		if(reached < M){
 			printf("0\n");
 		}else{
 			printf("%d\n", vAns.size());
-			for(int a = 0, len = vAns.size(); a < len; a++){
-				printf("%d %d\n", vAns[a].first, vAns[a].second);
-			}
+
+			for(int a = 0; a < vAns.size(); a++)
+				printf("%d %d\n", vAns[a].left, vAns[a].right);
 		}
-		
-		if(T != 0) printf("\n");
+
+		printf("%s", (T == 0 ? "" : "\n"));
 	}
 }

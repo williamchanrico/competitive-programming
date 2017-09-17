@@ -1,67 +1,62 @@
 #include <bits/stdc++.h>
+using namespace std;
 
-class Interval{
+class Sprinkler {
 public:
 	double left;
 	double right;
 };
 
-bool cmp(const Interval &x, const Interval &y){
+bool cmp(const Sprinkler &x, const Sprinkler &y){
+	if(x.left == y.left)
+		return x.right > y.right;
 	return x.left < y.left;
 }
 
 int main(){
-	// freopen("in.txt", "r", stdin);
-	int inputN;
-	int inputL;
-	int inputW;
+	int N, L, W;
 
-	while(scanf("%d%d%d", &inputN, &inputL, &inputW) == 3){
-		std::vector<Interval> v;
-		Interval interval;
+	while(scanf("%d %d %d", &N, &L, &W) != EOF){
+		int X, R;
+		Sprinkler sprinkler;
+		vector<Sprinkler> v;
 
-		for(int a = 0; a < inputN; a++){
-			double inputPos;
-			double inputRadius;
+		for(int a = 0; a < N; a++){
+			scanf("%d %d", &X, &R);
 
-			scanf("%lf%lf", &inputPos, &inputRadius);
+			if(R * 2 < W)
+				continue;
 
-			if(inputRadius < (inputW / 2.0)) continue;
+			double dx = sqrt(((double) R * R) - ((W / 2.0) * (W / 2.0)));
 
-			double dx = sqrt((inputRadius * inputRadius) - ((inputW / 2.0) * (inputW / 2.0)));
+			sprinkler.left = X - dx;
+			sprinkler.right = X + dx;
 
-			interval.left = inputPos - dx;
-			interval.right = inputPos + dx;
-
-			v.push_back(interval);
+			v.push_back(sprinkler);
 		}
 
+		sort(v.begin(), v.end(), cmp);
 
-		std::sort(v.begin(), v.end(), cmp);
-		
 		int ans = 0;
 		double reached = 0;
 
-		while(reached < inputL){
-			double currReached = reached;
-			int maxReachedIdx = -1;
-			
-			for(int a = 0, len = v.size(); a < len; a++){
+		while(reached < L){
+			double newReached = reached;
+
+			for(int a = 0; a < v.size(); a++){
 				if(v[a].left > reached) break;
-				
-				if(v[a].right > currReached){
-					maxReachedIdx = a;
-					currReached = v[a].right;
-				}
+
+				newReached = max(newReached, v[a].right);
 			}
 
-			if(maxReachedIdx == -1) break;
+			if(reached == newReached)
+				break;
+
+			reached = newReached;
+
 			++ans;
-			reached = currReached;
 		}
 
-		if(reached < inputL) printf("-1\n");
-		else printf("%d\n", ans);
+		printf("%d\n", (reached < L ? -1 : ans));
 	}
-
 }

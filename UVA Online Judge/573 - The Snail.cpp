@@ -1,24 +1,29 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
 
 int main(){
-	double H, C, S, F;
-	scanf("%lf%lf%lf%lf", &H, &C, &S, &F);
-	while(H!=0){
-		double minus=(F/100)*C;
-		int day=1;
-		double climbed=0;
-		while(climbed<=H && climbed>=0){
-			climbed+=C;
-			if(C-minus>0)C-=minus; else C=0;
-			if(climbed>H){
+	double H, U, D, F;
+
+	while(scanf("%lf %lf %lf %lf", &H, &U, &D, &F), H != 0){
+		double climbed = 0, minus = F / 100.0 * U;
+
+		for(int day = 1; day; day++){
+			climbed += (U > 0 ? U : 0);
+
+			if(climbed > H){
 				printf("success on day %d\n", day);
-			}else{
-				climbed-=S;
-				if(climbed<0)
-					printf("failure on day %d\n", day);
+
+				break;
 			}
-			day++;
+
+			climbed -= D;
+			U -= minus;
+			
+			if(climbed < 0){
+				printf("failure on day %d\n", day);
+
+				break;
+			}
 		}
-		scanf("%lf%lf%lf%lf", &H, &C, &S, &F);
 	}
 }

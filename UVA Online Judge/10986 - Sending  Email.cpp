@@ -1,60 +1,61 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1000111000
+#define INF 0x3f3f3f3f
+
+typedef pair<int, int> pii;
 
 int main(){
-	// freopen("in.txt", "r", stdin);
-	int N;
-	
-	scanf("%d", &N);
+	int T;
 
-	for(int counter = 1; counter <= N; counter++){
-		int n, m, S, T;
-		
-		scanf("%d %d %d %d", &n, &m, &S, &T);
+	scanf("%d", &T);
 
-		vector<vector<pair<int, int> > > AdjList(n);
+	for(int TC = 1; TC <= T; TC++){
+		int N, M, S, target;
 
-		for(int a = 0; a < m; a++){
-			int inp1, inp2, inp3;
+		scanf("%d %d %d %d", &N, &M, &S, &target);
 
-			scanf("%d %d %d", &inp1, &inp2, &inp3);
+		int A, B, W;
+		vector<vector<pair<int, int> > > adjList(N);
 
-			AdjList[inp1].push_back(make_pair(inp2, inp3));
-			AdjList[inp2].push_back(make_pair(inp1, inp3));
+		for(int a = 0; a < M; a++){
+			scanf("%d %d %d", &A, &B, &W);
+
+			adjList[A].push_back(make_pair(B, W));
+			adjList[B].push_back(make_pair(A, W));
 		}
 
-		vector<int> dist(n, INF);
-		
-		dist[S] = 0;
+		vector<int> dist(N, INF);
+		priority_queue<pii, vector<pii>, greater<pii> > pq;
 
-		priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
+		dist[S] = 0;
 
 		pq.push(make_pair(0, S));
 
 		while(!pq.empty()){
-			int d = pq.top().first;
-			int u = pq.top().second;
+			pii front = pq.top();
 
 			pq.pop();
 
-			if(dist[u] < d) continue;
+			int d = front.first;
+			int u = front.second;
 
-			for(int a = 0; a < AdjList[u].size(); a++){
-				pair<int, int> target = AdjList[u][a];
-				
-				if(dist[u] + target.second < dist[target.first]){
-					dist[target.first] = dist[u] + target.second;
-					pq.push(make_pair(dist[target.first], target.first));
+			if(d > dist[u]) continue;
+
+			for(int a = 0; a < adjList[u].size(); a++){
+				pair<int, int> v = adjList[u][a];
+
+				if(dist[u] + v.second < dist[v.first]){
+					dist[v.first] = dist[u] + v.second;
+
+					pq.push(make_pair(dist[v.first], v.first));
 				}
 			}
 		}
 
-		if(dist[T] != INF){
-			printf("Case #%d: %d\n", counter, dist[T]);
-		}else{
-			printf("Case #%d: unreachable\n", counter);
-		}
+		if(dist[target] == INF)
+			printf("Case #%d: unreachable\n", TC);
+		else
+			printf("Case #%d: %d\n", TC, dist[target]);
 	}
 }

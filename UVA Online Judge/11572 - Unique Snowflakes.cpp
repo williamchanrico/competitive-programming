@@ -1,37 +1,30 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 int main(){
-	// freopen("in.txt", "r", stdin);
 	int T;
 
 	scanf("%d", &T);
 
 	while(T--){
-		int inputN;
-		int ans = 0;
-		int startIdx = 0;
-		std::map<long long, int> m;
+		map<int, int> m;
+		int N, inp, ans = 0, startIdx = 0;
 
-		scanf("%d", &inputN);
+		scanf("%d", &N);
 
-		for(int a = 0; a < inputN; a++){
-			long long temp;
+		for(int a = 0; a < N; a++){
+			scanf("%d", &inp);
 
-			scanf("%lld", &temp);
-
-			if(m.count(temp) == 0 || m[temp] < startIdx){
-				m[temp] = a;
-			}else{
-				ans = std::max(ans, a - startIdx);
-				startIdx = m[temp] + 1;
-				m[temp] = a;
+			if(m.count(inp) && m[inp] >= startIdx){
+				ans = max(ans, a - startIdx);
+				startIdx = m[inp] + 1;
 			}
+
+			m[inp] = a;
 		}
-		
-		ans = std::max(ans, inputN - startIdx);
+
+		ans = max(ans, N - startIdx);
 
 		printf("%d\n", ans);
-
-		m.clear();
 	}
 }

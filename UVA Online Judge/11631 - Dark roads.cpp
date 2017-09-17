@@ -3,88 +3,82 @@ using namespace std;
 
 class UnionFind{
 private:
-	vector<int> p;
-	vector<int> rank;
-	vector<int> setSize;
 	int numSet;
+	vector<int> p, rank, setSize;
 
 public:
 	UnionFind(int x){
 		p.assign(x, 0);
 		rank.assign(x, 0);
 		setSize.assign(x, 1);
+
 		numSet = x;
 
 		for(int a = 0; a < x; a++)
 			p[a] = a;
 	}
 
-	int findSet(int x){
-		return (p[x] == x ? x : findSet(p[x]));
-	}
-
-	bool isSameSet(int x, int y){
-		return (findSet(p[x]) == findSet(p[y]));
-	}
+	int findSet(int x){ return (p[x] == x ? x : findSet(p[x])); }
+	
+	bool isSameSet(int x, int y){ return (findSet(x) == findSet(y)); }
 
 	void unionSet(int x, int y){
-		int a = findSet(x);
-		int b = findSet(y);
+		if(!isSameSet(x, y)){
+			numSet--;
 
-		--numSet;
+			int a = findSet(x);
+			int b = findSet(y);
 
-		if(rank[a] < rank[b]){
-			p[a] = b;
-			setSize[b] += setSize[a];
-		}else{
-			p[b] = a;
-			setSize[a] += setSize[b];
-			if(rank[a] == rank[b]) ++rank[a];
+			if(rank[a] > rank[b]){
+				p[b] = a;
+
+				setSize[a] += setSize[b];
+			}else{
+				p[a] = b;
+
+				setSize[b] += setSize[a];
+				
+				if(rank[a] == rank[b]) rank[b]++;
+			}
 		}
 	}
 
-	int numOfSet(){
-		return numSet;
-	}
+	int numOfSet(){ return numSet; }
 
-	int sizeOfSet(int x){
-		return setSize[findSet(x)];
-	}
+	int sizeOfSet(int x){ return setSize[findSet(x)]; }
 };
 
-vector<pair<int, pair<int, int> > > EdgeList;
-int m, n;
-
 int main(){
-	// freopen("in.txt", "r", stdin);
+	int M, N;
 
-	while(scanf("%d %d", &m, &n) && (m || n)){
-		int x;
-		int y;
-		int z;
-		int totalLen = 0;
+	while(scanf("%d %d", &M, &N), M | N){
+		int X, Y, Z, sum = 0;
+		vector<pair<int, pair<int, int> > > edgeList;
 
-		for(int a = 0; a < n; a++){
-			scanf("%d %d %d", &x, &y, &z);
-			totalLen += z;
-			EdgeList.push_back(make_pair(z, make_pair(x, y)));
+		for(int a = 0; a < N; a++){
+			scanf("%d %d %d", &X, &Y, &Z);
+
+			sum += Z;
+
+			edgeList.push_back(make_pair(Z, make_pair(X, Y)));
 		}
 
+		sort(edgeList.begin(), edgeList.end());
 
-		sort(EdgeList.begin(), EdgeList.end());
+		int mst = 0;
+		UnionFind UF(M);
 
-		int mstCost = 0;
+		for(int a = 0; a < N; a++){
+			pair<int, pair<int, int> > u = edgeList[a];
 
-		UnionFind UF(m);
+			if(!UF.isSameSet(u.second.first, u.second.second)){
+				mst += u.first;
 
-		for(int a = 0; a < n; a++){
-			if(!UF.isSameSet(EdgeList[a].second.first, EdgeList[a].second.second)){
-				UF.unionSet(EdgeList[a].second.first, EdgeList[a].second.second);
-				mstCost += EdgeList[a].first;
+				UF.unionSet(u.second.first, u.second.second);
 			}
 		}
 
-		printf("%d\n", totalLen - mstCost);
-		EdgeList.clear();
+		printf("%d\n", sum - mst);
 	}
+
 }

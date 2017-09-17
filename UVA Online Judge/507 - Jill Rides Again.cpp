@@ -1,34 +1,50 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
 
-#define INF 1000000000
-
-int T, N, inp;
+#define INF 1000111000
 
 int main(){
+	int T;
+
 	scanf("%d", &T);
-	for(int a=1;a<=T;a++){
-		int maks=-INF, start=1, end=1, temp=1, sum=0;
+
+	for(int TC = 1; TC <= T; TC++){
+		int N;
+		int sum = 0;
+		int maxSum = -INF;
+		int start = 0;
+		int end = 0;
+		int tempStart = 0;
+
 		scanf("%d", &N);
-		for(int b=1;b<=N-1;b++){
+
+		for(int a = 0; a < (N - 1); a++){
+			int inp;
+
 			scanf("%d", &inp);
-			sum+=inp;
-			if(sum<0){
-				sum=0;
-				temp=b+1;
-			}else{ 
-				if(maks<sum){
-					maks=sum;
-					start=temp;
-					end=b+1;
-				}else if(maks==sum){
-					if(b+1-temp>end-start){ end=b+1; start=temp; }
-				}
+
+			sum += inp;
+
+			if(maxSum < sum){
+				maxSum = sum;
+				start = tempStart;
+				end = a;
+			}else if(maxSum == sum && ((a - tempStart) > (end - start))){
+				start = tempStart;
+				end = a;
+			}
+
+			if(sum < 0){
+				sum = 0;
+				tempStart = a + 1;
 			}
 		}
-		if(maks>-1){
-			printf("The nicest part of route %d is between stops %d and %d\n", a, start, end);
+
+		if(maxSum > 0){
+			printf("The nicest part of route %d is between stops %d and %d\n", TC, start + 1, end + 2);
 		}else{
-			printf("Route %d has no nice parts\n", a);
+			printf("Route %d has no nice parts\n", TC);
 		}
 	}
+
 }

@@ -1,56 +1,78 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class unionFind{
+class UnionFind{
 private:
-	vector<int> p, rank;
 	int numSet;
+	vector<int> p, rank, setSize;
+
 public:
-	unionFind(int x){
-		p.assign(x+1, 0);
-		rank.assign(x+1, 0);
-		numSet = x+1;
-		for(int a = 1;a<=x;a++)
+	UnionFind(int x){
+		numSet = x;
+		p.assign(x + 1, 0);
+		rank.assign(x + 1, 0);
+		setSize.assign(x + 1, 1);
+
+		for(int a = 0; a <= x; a++)
 			p[a] = a;
 	}
-	int findSet(int x){ return (p[x] == x)?x:findSet(p[x]); }
-	bool isSameSet(int x, int y){ return (findSet(x) == findSet(y)); }
+
+	int findSet(int x){ return (p[x] == x ? x : findSet(p[x])); }
+
+	bool isSameSet(int x, int y){ return (findSet(p[x]) == findSet(p[y])); }
+
 	void unionSet(int x, int y){
 		if(!isSameSet(x, y)){
-			numSet--;
-			int a = findSet(x), b = findSet(y);
-			if(rank[a]>rank[b]){
+			int a = findSet(x);
+			int b = findSet(y);
+
+			if(rank[a] > rank[b]){
 				p[b] = a;
+				setSize[a] += setSize[b];
 			}else{
 				p[a] = b;
+				setSize[b] += setSize[a];
 				if(rank[a] == rank[b]) rank[b]++;
 			}
+
+			numSet--;
 		}
 	}
-	int numDisjointSet(){ return numSet; }
+
+	int sizeOfSet(int x){ return setSize[findSet(x)]; }
 };
 
 int main(){
-	//freopen("in.txt", "r", stdin);
-	//freopen("out.txt", "w", stdout);
-	char inp1, str[256];
-	int T, N, inp2, inp3;
+	int T;
+
 	scanf("%d", &T);
+
 	while(T--){
-		int ans1 = 0, ans2 = 0;
+		char cmd;
+		int success = 0, failed = 0, N, x, y;
+
 		scanf("%d ", &N);
-		unionFind UF(N);
-		while(gets(str)){
-			if(str[0] == '\0') break;
-			sscanf(str, "%c %d %d", &inp1, &inp2, &inp3);
-			if(inp1 == 'c'){
-				UF.unionSet(inp2, inp3);
-			}else{
-				if(UF.isSameSet(inp2, inp3)) ans1++;
-				else ans2++;
-			}
+
+		UnionFind UF(N);
+
+		while(true){
+			string s;
+
+			if(getline(cin, s), s == "") break;
+
+			sscanf(s.c_str(), "%c %d %d", &cmd, &x, &y);
+
+			if(cmd == 'c')
+				UF.unionSet(x, y);
+			else
+				if(UF.isSameSet(x, y))
+					success++;
+				else
+					failed++;
 		}
-		printf("%d,%d\n", ans1, ans2);
-		if(T)  printf("\n");
+
+		printf("%d,%d\n", success, failed);
+
+		if(T) printf("\n");
 	}
 }

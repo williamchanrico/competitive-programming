@@ -1,42 +1,48 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1000000000
-
-int T, n, m;
-vector< pair<int, int> > AdjList[1010];
+#define INF 0x3f3f3f3f
 
 int main(){
+	int T;
+
 	scanf("%d", &T);
+
 	while(T--){
-		int x, y, t;
-		scanf("%d %d", &n, &m);
-		for(int a=0;a<m;a++){
-			scanf("%d %d %d", &x, &y, &t);
-			AdjList[x].push_back(make_pair(y, t));
+		int N, M;
+
+		scanf("%d %d", &N, &M);
+
+		int X, Y, Z;
+		vector<vector<pair<int, int> > > adjList(N);
+
+		for(int a = 0; a < M; a++){
+			scanf("%d %d %d", &X, &Y, &Z);
+
+			adjList[X].push_back(make_pair(Y, Z));
 		}
-		vector<int> dist(n, INF); dist[0]=0;
-		for(int a=0;a<n-1;a++){
-			for(int b=0;b<n;b++){
-				for(int c=0;c<AdjList[b].size();c++){
-					pair<int, int> target=AdjList[b][c];
-					dist[target.first]=min(dist[target.first], dist[b]+target.second);
+
+		vector<int> dist(N, INF);
+
+		dist[0] = 0;
+
+		for(int a = 0; a < (N - 1); a++){
+			for(int b = 0; b < N; b++){
+				for(int c = 0; c < adjList[b].size(); c++){
+					pair<int, int> v = adjList[b][c];
+
+					dist[v.first] = min(dist[v.first], dist[b] + v.second);
 				}
 			}
 		}
-		bool possible=false;
-		for(int a=0;a<n;a++){
-			for(int b=0;b<AdjList[a].size();b++){
-				pair<int, int> target=AdjList[a][b];
-				if(dist[target.first]>dist[a]+target.second){
-					possible=true;
-					break;
-				}
-			}
-		}
-		if(possible) printf("possible\n");
-		else printf("not possible\n");
-		for(int a=0;a<n;a++)
-			AdjList[a].clear();
+
+		bool hasCycle = false;
+
+		for(int a = 0; a < N; a++)
+			for(int b = 0; b < adjList[a].size(); b++)
+				if(dist[a] + adjList[a][b].second < dist[adjList[a][b].first])
+					hasCycle = true;
+
+		printf("%s\n", (hasCycle ? "possible" : "not possible"));
 	}
 }

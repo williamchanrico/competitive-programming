@@ -1,63 +1,88 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1000000000
+#define INF 0x3f
 
-int T;
-string inp;
+bool valid(const string &x, const string &y){
+	bool ret = false;
 
-bool oneletter(string x, string y){
-	bool once=false;
-	if(x.size()!=y.size()) return false;
-	for(int a=0, sz=x.size();a<sz;a++)
-		if(x[a]!=y[a]) if(once) return false; else once=true;
+	if(x.size() != y.size())
+		return false;
+
+	for(int a = 0; a < x.size(); a++)
+		if(x[a] != y[a])
+			if(!ret)
+				ret = true;
+			else
+				return false;
+
 	return true;
 }
 
 int main(){
-	cin >> T; cin.ignore();
-	getline(cin, inp);
+	int T;
+
+	cin >> T;
+
 	while(T--){
-		vector<int> adjlist[210];
-		vector<string> words;
-		map<string, int> wordsidx;
-		int idx=0;
-		do{
-			getline(cin, inp);
-			words.push_back(inp);
-			wordsidx[inp]=idx;
-			for(int a=0;a<idx && inp[0]!='*';a++)
-				if(oneletter(words[a], inp)){
-					adjlist[a].push_back(idx);
-					adjlist[idx].push_back(a);
+		string str;
+		map<string, int> m;
+		vector<string> dict;
+		vector<vector<int> > adjList(210);
+
+		while(cin >> str, str[0] != '*'){
+			dict.push_back(str);
+
+			m[str] = dict.size() - 1;
+			
+			for(int a = 0; a < (dict.size() - 1); a++){
+				if(valid(str, dict[a])){
+					adjList[a].push_back(m[str]);
+					adjList[m[str]].push_back(a);
 				}
-			idx++;
-		}while(inp[0]!='*');
-		int start;
-		string outputstart, outputfinish;
-		queue<int> q;
-		while(getline(cin, inp)){
-			if(inp==""){ if(T!=0) cout << "\n"; break; }
-			outputstart=inp.substr(0, inp.find(" "));
-			start=wordsidx[outputstart];
+			}
+		}
+
+		cin.ignore(256, '\n');
+
+		while(getline(cin, str), str != ""){
+			string w1, w2;
+			stringstream ss(str);
+
+			ss >> w1 >> w2;
+
+			int start = m[w1], end = m[w2];
+
+			queue<int> q;
+			vector<int> dist(dict.size(), INF);
+
+			dist[start] = 0;
+
 			q.push(start);
-			outputfinish=inp.substr(inp.find(" ")+1, inp.size()-outputstart.size()-1);
-			vector<int> D(words.size(), INF); D[start]=0;
-			int finish=wordsidx[outputfinish];
+
 			while(!q.empty()){
-				int u=q.front(); q.pop();
-				for(int a=0, sz=adjlist[u].size();a<sz;a++){
-					int target=adjlist[u][a];
-					if(D[target]==INF){
-						D[target]=D[u]+1;
-						q.push(target);
+				int u = q.front();
+
+				q.pop();
+
+				for(int a = 0; a < adjList[u].size(); a++){
+					if(dist[adjList[u][a]] == INF){
+						q.push(adjList[u][a]);
+
+						dist[adjList[u][a]] = dist[u] + 1;
+
+						if(adjList[u][a] == end){
+							queue<int>().swap(q);
+
+							break;
+						}
 					}
 				}
 			}
-			cout << outputstart << " " << outputfinish << " ";
-			if(D[finish]!=INF) cout << D[finish] << "\n";
-			else cout << "-1\n";
-			q=queue<int>();
+
+			cout << w1 << " " << w2 << " " << dist[end] << "\n";
 		}
+
+		if(T) cout << "\n";
 	}
 }
