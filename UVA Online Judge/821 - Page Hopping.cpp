@@ -1,32 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1000000000
-
-int N, R, AdjMat[110][110];
+#define INF 0x3f3f3f3f
 
 int main(){
-	int x, y, Case=1;
-	while(scanf("%d %d", &x, &y), x||y){
-		for(int a=0;a<101;a++)
-			for(int b=0;b<101;b++)
-				AdjMat[a][b]=INF;
-		AdjMat[x][y]=1;
-		int maks=-1;
-		while(scanf("%d %d", &x, &y), x||y){
-			AdjMat[x][y]=1; maks=max(maks, x); maks=max(maks, y);
+	int A, B, TC = 1;
+
+	while(scanf("%d %d", &A, &B), (A | B)){
+		int adjMat[110][110];
+
+		memset(adjMat, INF, sizeof(adjMat));
+
+		adjMat[A][B] = 1;
+
+		while(scanf("%d %d", &A, &B), (A | B)){
+			adjMat[A][B] = 1;
 		}
-		for(int a=0;a<=maks;a++)
-			for(int b=0;b<=maks;b++)
-				for(int c=0;c<=maks;c++)
-					AdjMat[b][c]=min(AdjMat[b][c], AdjMat[b][a]+AdjMat[a][c]);
-		int div=0, ans=0;
-		for(int a=0;a<=maks;a++)
-			for(int b=0;b<=maks;b++)
-				if(AdjMat[a][b]!=INF && a!=b){
-					div++;
-					ans+=AdjMat[a][b];
+
+		for(int a = 1; a <= 100; a++)
+			for(int b = 1; b <= 100; b++)
+				for(int c = 1; c <= 100; c++)
+					adjMat[b][c] = min(adjMat[b][c], adjMat[b][a] + adjMat[a][c]);
+
+		int sum = 0, count = 0;
+
+		for(int a = 1; a <= 100; a++){
+			for(int b = 1; b <= 100; b++){
+				if(a != b && adjMat[a][b] != INF){
+					sum += adjMat[a][b];
+					count++;
 				}
-		printf("Case %d: average length between pages = %.3lf clicks\n", Case++, (1.0*ans)/div);
+			}
+		}
+
+		printf("Case %d: average length between pages = %.3lf clicks\n", TC++, (double) sum / count);
 	}
 }

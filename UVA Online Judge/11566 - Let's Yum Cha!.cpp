@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1000111000
+#define INF 0x3f3f3f3f
 
 int N, X, T, K, money, price[110], value[110], memo[110][1100][210];
 
@@ -17,11 +17,11 @@ int dp(int n, int total, int count){
 	
 	return memo[n][total][count] = max(dp(n + 1, total, count),
 		max(value[n] + dp(n + 1, total + price[n], count + 1), 
-			(value[n] * 2)+ dp(n + 1, total + (price[n] * 2), count + 2)));
+			(value[n] * 2) + dp(n + 1, total + (price[n] * 2), count + 2)));
 }
 
 int main(){
-	while(scanf("%d %d %d %d", &N, &X, &T, &K) && (N | X | T | K)){
+	while(scanf("%d %d %d %d", &N, &X, &T, &K), (N | X | T | K)){
 		N++;
 
 		money = X * N;
