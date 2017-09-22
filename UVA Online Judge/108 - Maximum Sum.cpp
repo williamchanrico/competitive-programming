@@ -3,7 +3,7 @@ using namespace std;
 
 #define INF 1000111000
 
-int memo[100 + 10][100 + 10];
+int memo[110][110];
 
 int dp(int N){
 	int maxSum = -INF;
@@ -28,6 +28,7 @@ int main(){
 	for(int a = 1; a <= N; a++){
 		for(int b = 1; b <= N; b++){
 			scanf("%d", &memo[a][b]);
+
 			memo[a][b] += memo[a - 1][b] + memo[a][b - 1] - memo[a - 1][b - 1];
 		}
 	}
