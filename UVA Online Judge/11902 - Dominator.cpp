@@ -1,60 +1,95 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T, n, inp;
-bitset<10001> explore1, explore2;
-char dom[110][110];
-vector<int> adjlist[110];
+int N;
+char ans[110][110];
+bitset<110> visitA, visitB;
+vector<vector<int> > adjList;
 
-void dfs(int x, int y){
-	if(x!=y){
-		explore2[x]=false;
-		for(int a=0, sz=adjlist[x].size();a<sz;a++)
-			if(explore2[adjlist[x][a]])
-				dfs(adjlist[x][a], y);
+void dfs(int x, int block){
+	if(block == -1){
+		if(!visitA[x])
+			return;
+
+		visitA[x] = 0;
+
+	}else{
+		if(!visitB[x] || x == block)
+			return;
+
+		visitB[x] = 0;
 	}
+
+	for(int a = 0; a < adjList[x].size(); a++)
+		dfs(adjList[x][a], block);
 }
 
-void firstdfs(int x){
-	explore1[x]=false;
-	for(int a=0, sz=adjlist[x].size();a<sz;a++)
-		if(explore1[adjlist[x][a]])
-			firstdfs(adjlist[x][a]);
+void printAns(){
+	for(int a = 0; a < N; a++){
+			
+		printf("+");
+		
+		for(int b = 0; b < (2 * N - 1); b++)
+			printf("-");
+		
+		printf("+\n|");
+
+		for(int b = 0; b < N; b++)
+			printf("%c|", ans[a][b]);
+		
+		printf("\n");
+	}
+
+	printf("+");
+		
+	for(int a = 0; a < (2 * N - 1); a++)
+		printf("-");
+	
+	printf("+\n");
 }
 
 int main(){
-	cin >> T;
-	for(int CASE=1;CASE<=T;CASE++){
-		cin >> n;
-		for(int a=0;a<n;a++)
-			for(int b=0;b<n;b++){
-				cin >> inp;
-				if(inp) adjlist[a].push_back(b);
+	int T;
+
+	scanf("%d", &T);
+
+	for(int TC = 1; TC <= T; TC++){
+		int inp;
+
+		scanf("%d", &N);
+
+		adjList.assign(N, vector<int>());
+
+		for(int a = 0; a < N; a++){
+			for(int b = 0; b < N; b++){
+				scanf("%d", &inp);
+
+				if(inp) adjList[a].push_back(b);
 			}
-		explore1.set(); explore2.set();
-		firstdfs(0);
-		for(int a=0;a<n;a++){
+		}
+		
+		visitA.set();
+
+		dfs(0, -1);
+
+		for(int a = 0; a < N; a++){
+			visitB.set();
+
 			dfs(0, a);
-			for(int b=0;b<n;b++){
-				if(explore2[b] && !explore1[b]) dom[a][b]='Y';
-				else dom[a][b]='N';
+
+			for(int b = 0; b < N; b++){
+				if(visitA[b])
+					ans[a][b] = 'N';
+				else
+					if(visitB[b])
+						ans[a][b] = 'Y';
+					else
+						ans[a][b] = 'N';
 			}
-			explore2.set();
 		}
-		cout << "Case " << CASE << ":\n";
-		for(int a=0;a<n;a++){
-			for(int b=0;b<2*n+1;b++)
-				if(b==0 || b==(2*n)) cout << "+";
-				else cout << "-";
-			cout << "\n|";
-			for(int b=0;b<n;b++)
-				cout << dom[a][b] << "|";
-			cout << "\n";
-		}
-		for(int b=0;b<2*n+1;b++)
-				if(b==0 || b==(2*n)) cout << "+";
-				else cout << "-";
-		cout << "\n";
-		for(int a=0;a<110;a++) adjlist[a].clear();
+
+		printf("Case %d:\n", TC);
+
+		printAns();
 	}
 }

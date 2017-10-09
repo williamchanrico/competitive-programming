@@ -1,69 +1,59 @@
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
-   
-int x,y, tab[25][15], mulai=1;
-   
-bool f(int baris){
-    for(int a=0;a<y;a++)
-        if(tab[baris][a]!=1)
-            return false;
-    return true;
+
+int R, C;
+char grid[30][10];
+
+int hilang(){
+    int last = -1;
+
+    for(int a = last + 1; a < R; a++){
+        bool full = true;
+
+        for(int b = 0; b < C; b++)
+            if(grid[a][b] == '0')
+                full = false;
+
+        if(full){
+            last = a;
+
+            for(int b = 0; b < C; b++)
+                grid[a][b] = '0';
+        }
+    }
+
+    return last;
 }
-   
-void hajar(int baris){
-    for(int a=0;a<y;a++)
-        tab[baris][a]=0;
-}
-   
-bool way(int bawah, int atas, int kolom){
-    for(int a=bawah-1;a>atas;a--)
-        if(tab[a][kolom]!=0)
-            return false;
-    return true;
-}
-   
-void runtuh(int baris){
-    for(int a=0;a<y;a++)
-        if(tab[baris][a]==1)
-            for(int b=x-1;b>baris;b--)
-                if(tab[b][a]==0 && way(b, baris, a)){
-                    tab[b][a]=1;
-                    tab[baris][a]=0;
-                    break;
-                }
-}
-  
-void inputdata(){
-    string temp[x];
-    for(int a=0;a<x;a++)
-            cin >> temp[a];
-    for(int a=0;a<x;a++)
-        for(int b=0;b<y;b++)
-            tab[a][b]=((temp[a][b]==48)?0:1);
-}
-  
-int main(){
-    bool again=true;
-     
-    cin >> x >> y;
-    inputdata();
-    while(again){
-        again=false;
-        for(int a=0;a<x;a++)
-            if(f(a)){
-                again=true;
-                hajar(a);    
-                mulai=a;
+
+void runtuh(int last){
+    for(int a = last - 1; a >= 0; a--){
+        for(int b =  0; b < C; b++){
+            if(grid[a][b] == '1'){
+                
+                grid[a][b] = '0';
+
+                int idx = a;
+
+                while(idx < R && grid[idx][b] == '0')
+                    idx++;
+
+                grid[idx - 1][b] = '1';
             }
-        for(int a=mulai-1;a>=0;a--)
-            runtuh(a);
+        }
     }
-    for(int a=0;a<x;a++){
-        for(int b=0;b<y;b++)
-            cout << tab[a][b];
-        cout << endl;
-    }
-       
-   
+}
+
+int main(){
+    scanf("%d %d", &R, &C);
+
+    for(int a = 0; a < R; a++)
+        scanf("%s", grid[a]);
+
+    int last = -1;
+
+    while((last = hilang()) != -1)
+        runtuh(last);
+
+    for(int a = 0; a < R; a++)
+        printf("%s\n", grid[a]);
 }

@@ -1,67 +1,46 @@
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+using namespace std;
 
-std::string nama[85], kandidat;
-int n1[85], n2[85], n3[85], T, jmlPeserta, jmlLolos;
+struct Data{
+	char id[10];
+	int n[5];
+};
 
-void tukar(int x, int y){
-	std::swap(nama[x], nama[y]);
-	std::swap(n1[x], n1[y]);
-	std::swap(n2[x], n2[y]);
-	std::swap(n3[x], n3[y]);
-}
-
-bool besarkiri(int x, int y){
-	if(n3[x]>=n3[y]){
-		if(n3[x]!=n3[y]){
-			return true;
-		}else{
-			if(n2[x]>=n2[y]){
-				if(n2[x]!=n2[y]){
-					return true;
-				}else{
-					if(n1[x]>=n1[y]){
-						if(n1[x]!=n1[y])
-							return true;
-					}else{
-						return false;
-					}
-				}
-			}else{
-				return false;
-			}
-		}
-	}else{
-		return false;
-	}
+bool cmp(const Data &x, const Data &y){
+	if(x.n[2] == y.n[2])
+		if(x.n[1] == y.n[1])
+			return x.n[0] > y.n[0];
+		else
+			return x.n[1] > y.n[1];
+	else
+		return x.n[2] > y.n[2];
 }
 
 int main(){
-	bool answered=false;
-	std::cin >> T;
-	while(T>0){
-		std::cin >> jmlPeserta >> jmlLolos;
-		std::cin >> kandidat;
-		for(int a=0;a<jmlPeserta;a++)
-			std::cin >> nama[a] >> n1[a] >> n2[a] >> n3[a];
-		for(int a=0;a<jmlPeserta;a++)
-			for(int b=a+1;b<jmlPeserta;b++)
-				if(besarkiri(b, a))
-					tukar(a, b);
-		for(int a=0;a<jmlLolos;a++)
-			if(nama[a]==kandidat){
-				std::cout << "YA\n";
-				answered=true;
-			}
-		if(!answered)
-			std::cout << "TIDAK\n";
-		answered=false;
-		
-		/*
-		for(int a=0;a<jmlPeserta;a++)
-			std::cout << nama[a] << " " << n1[a] << " " << n2[a] << " " << n3[a] << std::endl;
-		*/
-		T--;
+	int T;
+
+	scanf("%d", &T);
+
+	while(T--){
+		int N, M;
+		char targetId[10];
+
+		scanf("%d %d %s", &N, &M, targetId);
+
+		vector<Data> v(N);
+
+		for(int a = 0; a < N; a++)
+			scanf("%s %d %d %d", v[a].id, &v[a].n[0], &v[a].n[1], &v[a].n[2]);
+
+
+		sort(v.begin(), v.end(), cmp);
+
+		bool ans = false;
+
+		for(int a = 0; a < M; a++)
+			if(strcmp(v[a].id, targetId) == 0)
+				ans = true;
+
+		printf("%s\n", (ans ? "YA" : "TIDAK"));
 	}
-	return 0;
 }

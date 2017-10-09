@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 0x3f
+#define INF 0x3f3f3f3f
 
 bool valid(const string &x, const string &y){
 	bool ret = false;
@@ -43,7 +43,7 @@ int main(){
 			}
 		}
 
-		cin.ignore(256, '\n');
+		cin.ignore(INT_MAX, '\n');
 
 		while(getline(cin, str), str != ""){
 			string w1, w2;

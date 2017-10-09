@@ -1,32 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> AdjList[110], ts;
-int n, m;
-bitset<110> explore;
+bitset<110> bs;
+vector<int> ans;
+vector<vector<int> > adjList;
 
 void dfs(int x){
-	explore[x]=false;
-	for(int a=0;a<AdjList[x].size();a++)
-		if(explore[AdjList[x][a]])
-			dfs(AdjList[x][a]);
-	ts.push_back(x);
+	if(bs[x]){
+		bs[x] = false;
+
+		for_each(adjList[x].begin(), adjList[x].end(), dfs);
+
+		ans.push_back(x);
+	}
 }
 
 int main(){
-	while(scanf("%d%d", &n, &m), (n||m)){
-		explore.set();
-		int inp1, inp2;
-		for(int a=0;a<m;a++){
-			cin >> inp1 >> inp2;
-			AdjList[inp1].push_back(inp2);
+	int N, M;
+
+	while(scanf("%d %d", &N, &M), (N | M)){
+		int A, B;
+		
+		bs.set();
+		adjList.assign(N + 1, vector<int>());
+		ans.clear();
+
+		for(int a = 0; a < M; a++){
+			scanf("%d %d", &A, &B);
+
+			adjList[A].push_back(B);
 		}
-		for(int a=1;a<=n;a++)
-			if(explore[a]) dfs(a);
-		for(int a=ts.size()-1;a>-1;a--)
-			if(a!=0) cout << ts[a] << " ";
-			else cout << ts[a] << "\n";
-		for(int a=0;a<110;a++) AdjList[a].clear();
-		ts.clear();
+
+		for(int a = 1; a <= N; a++)
+			if(bs[a])
+				dfs(a);
+
+		for(int a = ans.size() - 1; a >= 0; a--)
+			if(a)
+				printf("%d ", ans[a]);
+			else
+				printf("%d", ans[a]);
+		printf("\n");
 	}
 }
