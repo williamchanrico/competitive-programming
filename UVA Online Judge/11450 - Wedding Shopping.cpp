@@ -1,45 +1,46 @@
 #include <bits/stdc++.h>
+using namespace std;
 
-#define INF 1000111222
+#define INF 0x3f3f3f3f
 
-int inputM;
-int inputC;
-int inputPrice[25][25];
-int memo[205][25];
+int M, C, price[30][30], memo[210][30];
 
-int shop(int moneyLeft, int garmentNumber){
-	if(moneyLeft < 0) return -INF;
-	if(garmentNumber == inputC) return inputM - moneyLeft;
-	if(memo[moneyLeft][garmentNumber] != -1) return memo[moneyLeft][garmentNumber];
+int dp(int money, int idx){
+	if(money > M) return -INF;
+	if(idx == C) return money;
+	if(memo[money][idx] != -1) return memo[money][idx];
 
-	int ret = -INF;
+	int ans = -INF;
 
-	for(int a = 1; a <= inputPrice[garmentNumber][0]; a++)
-		ret = std::max(ret, shop(moneyLeft - inputPrice[garmentNumber][a], garmentNumber + 1));
+	for(int a = 1; a <= price[idx][0]; a++)
+		ans = max(ans, dp(money + price[idx][a], idx + 1));
 
-	return memo[moneyLeft][garmentNumber] = ret;
+	return memo[money][idx] = ans;
 }
 
 int main(){
-	// freopen("in.txt", "r", stdin);
 	int T;
 
 	scanf("%d", &T);
 
 	while(T--){
-		scanf("%d %d", &inputM, &inputC);
+		scanf("%d %d", &M, &C);
 
-		for(int a = 0; a < inputC; a++){
-			scanf("%d", &inputPrice[a][0]);
-			for(int b = 1; b <= inputPrice[a][0]; b++)
-				scanf("%d", &inputPrice[a][b]);
+		for(int a = 0; a < C; a++){
+			scanf("%d", &price[a][0]);
+
+			for(int b = 0; b < price[a][0]; b++)
+				scanf("%d", &price[a][b + 1]);
 		}
 
 		memset(memo, -1, sizeof(memo));
 
-		int ans = shop(inputM, 0);
+		int ans = dp(0, 0);
 
-		if(ans < 0) printf("no solution\n");
-		else printf("%d\n", ans);
+		if(ans == -INF)
+			printf("no solution\n");
+		else
+			printf("%d\n", ans);
 	}
+
 }

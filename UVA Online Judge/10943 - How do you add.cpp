@@ -3,20 +3,17 @@ using namespace std;
 
 int N, K, memo[110][110];
 
-int dp(int sum, int count){
-	if(sum > N || count > K)
-		return 0;
-	if(count == K)
-		return (sum == N);
-	if(memo[sum][count] != -1)
-		return memo[sum][count];
+int dp(int total, int count){
+	if(total > N) return 0;
+	if(count == K) return (total == N);
+	if(memo[total][count] != -1) return memo[total][count];
 
-	memo[sum][count] = 0;
+	memo[total][count] = 0;
 
 	for(int a = 0; a <= N; a++)
-		memo[sum][count] = (memo[sum][count] + dp(sum + a, count + 1)) % 1000000;
+		memo[total][count] = (memo[total][count] + dp(total + a, count + 1)) % 1000000;
 
-	return memo[sum][count];
+	return memo[total][count];
 }
 
 int main(){

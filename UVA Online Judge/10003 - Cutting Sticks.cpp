@@ -1,15 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 1e9
+#define INF 0x3f3f3f3f
 
 int L, N, cut[60], memo[60][60];
 
 int dp(int left, int right){
-	if(left + 1 == right)
-		return 0;
-	if(memo[left][right] != -1)
-		return memo[left][right];
+	if(left + 1 == right) return 0;
+	if(memo[left][right] != -1) return memo[left][right];
 
 	int ans = INF;
 
@@ -21,6 +19,8 @@ int dp(int left, int right){
 
 int main(){
 	while(scanf("%d", &L), L){
+		memset(memo, -1, sizeof(memo));
+
 		scanf("%d", &N);
 
 		cut[0] = 0;
@@ -29,8 +29,6 @@ int main(){
 		for(int a = 1; a <= N; a++)
 			scanf("%d", &cut[a]);
 
-		memset(memo, -1, sizeof(memo));
-
 		printf("The minimum cutting is %d.\n", dp(0, N + 1));
-	}	
+	}
 }
