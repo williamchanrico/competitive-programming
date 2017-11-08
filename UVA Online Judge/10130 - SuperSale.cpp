@@ -1,28 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T, N, MW, G, V[1010], W[1010], dp[1010][40];
+int T, N, maxW, G, V[1100], W[1010], memo[1100][40];
 
-int val(int id, int remW){
-	if(id==N || remW==0) return 0;
-	if(dp[id][remW]!=-1) return dp[id][remW];
-	if(W[id]>remW) return dp[id][remW]=val(id+1, remW);
-	return dp[id][remW]=max(val(id+1, remW), V[id]+val(id+1, remW-W[id]));
+int dp(int idx, int remW){
+	if(idx == N || remW == 0)
+		return 0;
+	if(memo[idx][remW] != -1)
+		return memo[idx][remW];
+	if(remW < W[idx])
+		return memo[idx][remW] = dp(idx + 1, remW);
+
+	return memo[idx][remW] = max(dp(idx + 1, remW), V[idx] +  dp(idx + 1, remW - W[idx]));
 }
+
 
 int main(){
 	scanf("%d", &T);
+
 	while(T--){
-		memset(dp, -1, sizeof(dp));
+
 		scanf("%d", &N);
-		for(int a=0;a<N;a++)
+
+		memset(memo, -1, sizeof(memo));
+
+		for(int a = 0; a < N; a++)
 			scanf("%d %d", &V[a], &W[a]);
-		int ans=0;
+
+		int ans = 0;
+
 		scanf("%d", &G);
+		
 		while(G--){
-			scanf("%d", &MW);
-			ans+=val(0, MW);
+			scanf("%d", &maxW);
+
+			ans += dp(0, maxW);
 		}
+		
 		printf("%d\n", ans);
 	}
 }

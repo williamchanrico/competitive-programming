@@ -6,8 +6,10 @@ using namespace std;
 int L, N, cut[60], memo[60][60];
 
 int dp(int left, int right){
-	if(left + 1 == right) return 0;
-	if(memo[left][right] != -1) return memo[left][right];
+	if(left + 1 == right)
+		return 0;
+	if(memo[left][right] != -1)
+		return memo[left][right];
 
 	int ans = INF;
 

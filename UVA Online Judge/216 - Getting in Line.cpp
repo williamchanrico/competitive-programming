@@ -3,12 +3,8 @@ using namespace std;
 
 #define INF 1e9
 
-int N, x[10], y[10], p[10][1 << 10];
+int N, x[10], y[10], after[10][1 << 10];
 double dist[10][10], memo[10][1 << 10];
-
-double hypot(int x, int y){
-	return sqrt((double) x * x + (double) y * y);
-}
 
 double dp(int pos, int bitmask){
 	if(bitmask == ((1 << N) - 1))
@@ -24,7 +20,7 @@ double dp(int pos, int bitmask){
 
 			if(next < memo[pos][bitmask]){
 				memo[pos][bitmask] = next;
-				p[pos][bitmask] = a; 
+				after[pos][bitmask] = a; 
 			}
 		}
 	}
@@ -33,7 +29,7 @@ double dp(int pos, int bitmask){
 }
 
 int main(){
-	int TC = 1;
+	int T = 1;
 
 	while(scanf("%d", &N), N){
 		for(int a = 0; a < N; a++)
@@ -61,13 +57,13 @@ int main(){
 		}
 
 		printf("**********************************************************\n");
-		printf("Network #%d\n", TC++);
+		printf("Network #%d\n", T++);
 
 		int currNode = startNode;
 		int currMask = (0 | (1 << startNode));
 
 		for(int a = 0; a < (N - 1); a++){
-			int nextNode = p[currNode][currMask];
+			int nextNode = after[currNode][currMask];
 
 			printf("Cable requirement to connect (%d,%d) to (%d,%d) is %.2lf feet.\n",
 				x[currNode], y[currNode], x[nextNode], y[nextNode], dist[currNode][nextNode]);

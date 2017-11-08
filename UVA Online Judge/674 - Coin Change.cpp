@@ -1,17 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N, dp[10][7500], coin[5]={1, 5, 10, 25, 50};
+#define COIN_COUNT 5
 
-int ways(int id, int val){
-	if(val==0) return 1;
-	if(val<0 || id==5) return 0;
-	if(dp[id][val]!=-1) return dp[id][val];
-	return dp[id][val]=ways(id+1, val)+ways(id, val-coin[id]);
+int N, memo[10][7500], coin[] = {1, 5, 10, 25, 50};
+
+int dp(int idx, int val){
+	if(val == 0)
+		return 1;
+	if(val < 0 || idx == COIN_COUNT)
+		return 0;
+	if(memo[idx][val] != -1)
+		return memo[idx][val];
+
+	return memo[idx][val] = dp(idx + 1, val) + dp(idx, val - coin[idx]);
 }
 
 int main(){
-	memset(dp, -1, sizeof(dp));
-	while(scanf("%d", &N)!=EOF)
-		printf("%d\n", ways(0, N));
+	memset(memo, -1, sizeof(memo));
+
+	while(scanf("%d", &N) != EOF){
+		printf("%d\n", dp(0, N));
+	}
 }
