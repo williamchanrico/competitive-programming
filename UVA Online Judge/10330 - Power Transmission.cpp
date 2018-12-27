@@ -7,56 +7,60 @@ using namespace std;
 int res[MAX_V][MAX_V], S, T, F, nodes = 0;
 vector<int> p;
 
-void augment(int u, int minEdge){
-    if(u == S){
+void augment(int u, int minEdge)
+{
+    if (u == S) {
         F = minEdge;
- 
+
         return;
- 
-    }else if(p[u] != -1){
+
+    } else if (p[u] != -1) {
         augment(p[u], min(minEdge, res[p[u]][u]));
- 
+
         res[p[u]][u] -= F;
         res[u][p[u]] += F;
     }
 }
 
-int maxFlow(){
+int maxFlow()
+{
     int maxF = 0;
- 
-    while(true){
+
+    while (true) {
         vector<int> dist(nodes, INF);
         queue<int> q;
- 
+
         dist[S] = 0;
         q.push(S);
         p.assign(nodes, -1);
- 
-        while(!q.empty()){
+
+        while (!q.empty()) {
             int u = q.front();
- 
+
             q.pop();
- 
-            if(u == T) break;
- 
-            for(int a = 0; a < nodes; a++){
-                if(res[u][a] > 0 && dist[a] == INF){
+
+            if (u == T)
+                break;
+
+            for (int a = 0; a < nodes; a++) {
+                if (res[u][a] > 0 && dist[a] == INF) {
                     dist[a] = dist[u] + 1;
                     q.push(a);
                     p[a] = u;
                 }
             }
         }
- 
+
         F = 0;
- 
+
         augment(T, INF);
- 
-        if(F == 0) break;
- 
+
+        if (F == 0)
+            break;
+
         maxF += F;
     }
- 
+
     return maxF;
 }
 
@@ -77,47 +81,48 @@ int maxFlow(){
         from node 8, not node 7, to node 9 (2 * 5 - 1).   
 */
 
-int nodeIdx(int x){ return 2 * x - 1; }
+int nodeIdx(int x) { return 2 * x - 1; }
 
-int main(){
-	int N;
+int main()
+{
+    int N;
 
-	while(scanf("%d", &nodes) != EOF){
-		memset(res, 0, sizeof(res));
-		
-		for(int a = 1; a <= nodes; a++)
-			scanf("%d", &res[nodeIdx(a)][nodeIdx(a) + 1]);
+    while (scanf("%d", &nodes) != EOF) {
+        memset(res, 0, sizeof(res));
+
+        for (int a = 1; a <= nodes; a++)
+            scanf("%d", &res[nodeIdx(a)][nodeIdx(a) + 1]);
 
         S = 0;
         T = (2 * nodes) + 1;
         nodes = (2 * nodes) + 2;
 
-		scanf("%d", &N);
+        scanf("%d", &N);
 
-		while(N--){
+        while (N--) {
             int A, B, C;
 
-			scanf("%d %d %d", &A, &B, &C);
+            scanf("%d %d %d", &A, &B, &C);
 
             res[nodeIdx(A) + 1][nodeIdx(B)] += C;
-		}
+        }
 
         int entryCount, exitCount, inp;
 
         scanf("%d %d", &entryCount, &exitCount);
 
-        while(entryCount--){
+        while (entryCount--) {
             scanf("%d", &inp);
 
             res[S][nodeIdx(inp)] = INF;
         }
 
-        while(exitCount--){
+        while (exitCount--) {
             scanf("%d", &inp);
 
             res[nodeIdx(inp) + 1][T] = INF;
         }
 
         printf("%d\n", maxFlow());
-	}
+    }
 }

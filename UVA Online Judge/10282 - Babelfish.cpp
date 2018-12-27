@@ -1,25 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	string word, meaning;
-	map<string, string> m;
+int main()
+{
+    string word, meaning;
+    map<string, string> m;
 
-	while(getline(cin, word), word != ""){
-		stringstream ss(word);
+    while (getline(cin, word), word != "") {
+        stringstream ss(word);
 
-		ss >> meaning >> word;
+        ss >> meaning >> word;
 
-		m[word] = meaning;
-	}
+        m[word] = meaning;
+    }
 
-	while(cin >> word){
+    while (cin >> word) {
 
-		if(m.count(word))
-			cout << m[word] << "\n";
-		else
-			cout << "eh\n";
-	}
+        if (m.count(word))
+            cout << m[word] << "\n";
+        else
+            cout << "eh\n";
+    }
 }
 
 /*

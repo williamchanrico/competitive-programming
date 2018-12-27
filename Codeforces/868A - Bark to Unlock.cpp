@@ -1,27 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int N;
-	string inp[110], pass, ans = "";
+int main()
+{
+    int N;
+    string inp[110], pass, ans = "";
 
-	cin >> pass >> N;
+    cin >> pass >> N;
 
-	for(int a = 0; a < N; a++){
-		cin >> inp[a];
+    for (int a = 0; a < N; a++) {
+        cin >> inp[a];
 
-		for(int b = 0; b <= a; b++){
-			ans += inp[a] + inp[b];
-			ans += inp[b] + inp[a];
-		}
-	}
+        for (int b = 0; b <= a; b++) {
+            ans += inp[a] + inp[b];
+            ans += inp[b] + inp[a];
+        }
+    }
 
-	if(ans.find(pass) != string::npos)
-		cout << "YES\n";
-	else
-		cout << "NO\n";
+    if (ans.find(pass) != string::npos)
+        cout << "YES\n";
+    else
+        cout << "NO\n";
 }
-
 
 /*
 

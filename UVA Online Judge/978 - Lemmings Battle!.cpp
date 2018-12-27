@@ -1,77 +1,77 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	while(T--){
-		int B, SG, SB, inp;
+    while (T--) {
+        int B, SG, SB, inp;
 
-		scanf("%d %d %d", &B, &SG, &SB);
+        scanf("%d %d %d", &B, &SG, &SB);
 
-		priority_queue<int> pqG, pqB;
+        priority_queue<int> pqG, pqB;
 
-		for(int a = 0; a < SG; a++){
-			scanf("%d", &inp);
+        for (int a = 0; a < SG; a++) {
+            scanf("%d", &inp);
 
-			pqG.push(inp);
-		}
+            pqG.push(inp);
+        }
 
-		for(int a = 0; a < SB; a++){
-			scanf("%d", &inp);
+        for (int a = 0; a < SB; a++) {
+            scanf("%d", &inp);
 
-			pqB.push(inp);
-		}
+            pqB.push(inp);
+        }
 
-		while(!pqG.empty() && !pqB.empty()){
-			vector<int> battle;
+        while (!pqG.empty() && !pqB.empty()) {
+            vector<int> battle;
 
-			for(int a = 0; a < B; a++){
-				if(pqG.empty() || pqB.empty())
-					break;
+            for (int a = 0; a < B; a++) {
+                if (pqG.empty() || pqB.empty())
+                    break;
 
-				battle.push_back(pqG.top() - pqB.top());
-				
-				pqG.pop();
-				pqB.pop();
-			}
+                battle.push_back(pqG.top() - pqB.top());
 
-			for(int a = 0; a < battle.size(); a++)
-				if(battle[a] > 0)
-					pqG.push(battle[a]);
-				else if(battle[a] < 0)
-					pqB.push(-battle[a]);
-		}
+                pqG.pop();
+                pqB.pop();
+            }
 
-		if(pqG.empty() && pqB.empty()){
+            for (int a = 0; a < battle.size(); a++)
+                if (battle[a] > 0)
+                    pqG.push(battle[a]);
+                else if (battle[a] < 0)
+                    pqB.push(-battle[a]);
+        }
 
-			printf("green and blue died\n");
+        if (pqG.empty() && pqB.empty()) {
 
-		}else if(pqB.empty()){
+            printf("green and blue died\n");
 
-			printf("green wins\n");
+        } else if (pqB.empty()) {
 
-			while(!pqG.empty()){
-				printf("%d\n", pqG.top());
+            printf("green wins\n");
 
-				pqG.pop();
-			}
+            while (!pqG.empty()) {
+                printf("%d\n", pqG.top());
 
-		}else{
+                pqG.pop();
+            }
 
-			printf("blue wins\n");
+        } else {
 
-			while(!pqB.empty()){
-				printf("%d\n", pqB.top());
+            printf("blue wins\n");
 
-				pqB.pop();
-			}
+            while (!pqB.empty()) {
+                printf("%d\n", pqB.top());
 
-		}
+                pqB.pop();
+            }
+        }
 
-		if(T)
-			printf("\n");
-	}
+        if (T)
+            printf("\n");
+    }
 }

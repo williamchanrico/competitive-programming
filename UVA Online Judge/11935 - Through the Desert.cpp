@@ -6,58 +6,67 @@ using namespace std;
 
 vector<string> v;
 
-bool valid(double maxFuel){
-	string inpStr;
-	double remFuel = maxFuel;
-	int inpNum, pos = 0, leak = 0, goal = INF, consumption = 0;
+bool valid(double maxFuel)
+{
+    string inpStr;
+    double remFuel = maxFuel;
+    int inpNum, pos = 0, leak = 0, goal = INF, consumption = 0;
 
-	for(int a = 0; a < v.size(); a++){
-		stringstream ss(v[a]);
+    for (int a = 0; a < v.size(); a++) {
+        stringstream ss(v[a]);
 
-		ss >> inpNum >> inpStr;
+        ss >> inpNum >> inpStr;
 
-		int dist = inpNum - pos;
+        int dist = inpNum - pos;
 
-		remFuel -= (consumption * dist / 100.0) + (leak * dist);
+        remFuel -= (consumption * dist / 100.0) + (leak * dist);
 
-		if(remFuel < 0) return false;
+        if (remFuel < 0)
+            return false;
 
-		pos = inpNum;
+        pos = inpNum;
 
-		if(inpStr == "Goal") return true;
-		else if(inpStr == "Leak") leak++;
-		else if(inpStr == "Mechanic") leak = 0;
-		else if(inpStr == "Gas") remFuel = maxFuel;
-		else if(inpStr == "Fuel") ss >> inpStr >> consumption;
-	}
+        if (inpStr == "Goal")
+            return true;
+        else if (inpStr == "Leak")
+            leak++;
+        else if (inpStr == "Mechanic")
+            leak = 0;
+        else if (inpStr == "Gas")
+            remFuel = maxFuel;
+        else if (inpStr == "Fuel")
+            ss >> inpStr >> consumption;
+    }
 }
 
-int main(){
-	// freopen("in.txt", "r", stdin);
-	// freopen("out.txt", "w", stdout);
-	string inp;
+int main()
+{
+    // freopen("in.txt", "r", stdin);
+    // freopen("out.txt", "w", stdout);
+    string inp;
 
-	while(getline(cin, inp)){
+    while (getline(cin, inp)) {
 
-		if(inp == "0 Fuel consumption 0") break;
+        if (inp == "0 Fuel consumption 0")
+            break;
 
-		v.push_back(inp);
+        v.push_back(inp);
 
-		if(inp.find("Goal") != string::npos){
-			double lo = 0.0, hi = 100000.0, ans;
+        if (inp.find("Goal") != string::npos) {
+            double lo = 0.0, hi = 100000.0, ans;
 
-			while(fabs(hi - lo) > EPS){
-				double mid = (lo + hi) / 2.0;
+            while (fabs(hi - lo) > EPS) {
+                double mid = (lo + hi) / 2.0;
 
-				if(valid(mid))
-					ans = hi = mid;
-				else
-					lo = mid;
-			}
+                if (valid(mid))
+                    ans = hi = mid;
+                else
+                    lo = mid;
+            }
 
-			cout << fixed << setprecision(3) << ans << "\n";
+            cout << fixed << setprecision(3) << ans << "\n";
 
-			v.clear();
-		}
-	}
+            v.clear();
+        }
+    }
 }

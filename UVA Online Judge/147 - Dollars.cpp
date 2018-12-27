@@ -3,23 +3,23 @@ using namespace std;
 
 long long memo[31000];
 
-int main(){
-	int dollar, cent, coinValue[] = {5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000};
+int main()
+{
+    int dollar, cent, coinValue[] = { 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000 };
 
-	while(scanf("%d.%d", &dollar, &cent), (dollar | cent)){
-		int target = (dollar * 100) + cent;
+    while (scanf("%d.%d", &dollar, &cent), (dollar | cent)) {
+        int target = (dollar * 100) + cent;
 
-		memset(memo, 0, sizeof(memo));
+        memset(memo, 0, sizeof(memo));
 
-		memo[0] = 1;
+        memo[0] = 1;
 
-		for(int a = 0; a < sizeof(coinValue) / sizeof(coinValue[0]); a++)
-			for(int b = coinValue[a]; b <= target; b++)
-				memo[b] += memo[b - coinValue[a]];
+        for (int a = 0; a < sizeof(coinValue) / sizeof(coinValue[0]); a++)
+            for (int b = coinValue[a]; b <= target; b++)
+                memo[b] += memo[b - coinValue[a]];
 
-		printf("%3d.%02d%17lld\n", dollar, cent, memo[target]);
-	}
-
+        printf("%3d.%02d%17lld\n", dollar, cent, memo[target]);
+    }
 }
 
 /* Top Down

@@ -6,44 +6,47 @@ using namespace std;
 string str, strP;
 int backTable[MAX_N];
 
-void kmpPreprocess(){
-	int a = 0, b = -1;
+void kmpPreprocess()
+{
+    int a = 0, b = -1;
 
-	backTable[0] = -1;
+    backTable[0] = -1;
 
-	while(a < strP.size()){
-		while(b >= 0 && strP[a] != strP[b])
-			b = backTable[b];
+    while (a < strP.size()) {
+        while (b >= 0 && strP[a] != strP[b])
+            b = backTable[b];
 
-		a++;
-		b++;
+        a++;
+        b++;
 
-		backTable[a] = b;
-	}
+        backTable[a] = b;
+    }
 }
 
-void kmpSearch(){
-	int a = 0, b = 0;
+void kmpSearch()
+{
+    int a = 0, b = 0;
 
-	while(a < str.size()){
-		while(b >= 0 && str[a] != strP[b])
-			b = backTable[b];
+    while (a < str.size()) {
+        while (b >= 0 && str[a] != strP[b])
+            b = backTable[b];
 
-		a++;
-		b++;
+        a++;
+        b++;
 
-		if(b == strP.size()){
-			cout << "Pattern found at " << a - b << "\n";
+        if (b == strP.size()) {
+            cout << "Pattern found at " << a - b << "\n";
 
-			b = backTable[b];
-		}
-	}
+            b = backTable[b];
+        }
+    }
 }
 
-int main(){
-	cin >> str >> strP;
+int main()
+{
+    cin >> str >> strP;
 
-	kmpPreprocess();
+    kmpPreprocess();
 
-	kmpSearch();
+    kmpSearch();
 }

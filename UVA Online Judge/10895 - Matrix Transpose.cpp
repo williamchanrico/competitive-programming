@@ -1,61 +1,62 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int M, N;
+int main()
+{
+    int M, N;
 
-	while(scanf("%d %d", &M, &N) != EOF){
+    while (scanf("%d %d", &M, &N) != EOF) {
 
-		vector<vector<pair<int, int> > > v(M), ans(N);
+        vector<vector<pair<int, int>>> v(M), ans(N);
 
-		for(int a = 0; a < M; a++){
-			int R;
+        for (int a = 0; a < M; a++) {
+            int R;
 
-			scanf("%d", &R);
+            scanf("%d", &R);
 
-			vector<int> vRow(R);
-			
-			for(int b = 0; b < R; b++)
-				scanf("%d", &vRow[b]);
+            vector<int> vRow(R);
 
-			int val;
+            for (int b = 0; b < R; b++)
+                scanf("%d", &vRow[b]);
 
-			for(int b = 0; b < R; b++){
-				scanf("%d", &val);
+            int val;
 
-				v[a].push_back(make_pair(vRow[b], val));
-			}
-		}
+            for (int b = 0; b < R; b++) {
+                scanf("%d", &val);
 
-		for(int a = 0; a < M; a++){
-			for(int b = 0; b < v[a].size(); b++){
-				pair<int, int> u = v[a][b];
+                v[a].push_back(make_pair(vRow[b], val));
+            }
+        }
 
-				ans[u.first - 1].push_back(make_pair(a + 1, u.second));
-			}
-		}
+        for (int a = 0; a < M; a++) {
+            for (int b = 0; b < v[a].size(); b++) {
+                pair<int, int> u = v[a][b];
 
-		printf("%d %d\n", N, M);
+                ans[u.first - 1].push_back(make_pair(a + 1, u.second));
+            }
+        }
 
-		for(int a = 0; a < N; a++){
-			printf("%d", ans[a].size());
+        printf("%d %d\n", N, M);
 
-			for(int b = 0; b < ans[a].size(); b++)
-				printf(" %d", ans[a][b].first);
+        for (int a = 0; a < N; a++) {
+            printf("%d", ans[a].size());
 
-			printf("\n");
+            for (int b = 0; b < ans[a].size(); b++)
+                printf(" %d", ans[a][b].first);
 
-			for(int b = 0; b < ans[a].size(); b++){
-				if(b) printf(" ");
+            printf("\n");
 
-				printf("%d", ans[a][b].second);
-			}
+            for (int b = 0; b < ans[a].size(); b++) {
+                if (b)
+                    printf(" ");
 
-			printf("\n");
-		}
-	}
+                printf("%d", ans[a][b].second);
+            }
+
+            printf("\n");
+        }
+    }
 }
-
 
 /* noob's way of constructing the ans
 

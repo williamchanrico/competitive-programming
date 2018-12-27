@@ -6,37 +6,37 @@ using namespace std;
 int M, memo[60000];
 vector<int> v(110);
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	while(T--){
-		scanf("%d", &M);
+    while (T--) {
+        scanf("%d", &M);
 
-		int sum = 0;
+        int sum = 0;
 
-		for(int a = 0; a < M; a++){
-			scanf("%d", &v[a]);
+        for (int a = 0; a < M; a++) {
+            scanf("%d", &v[a]);
 
-			sum += v[a];
-		}
+            sum += v[a];
+        }
 
-		memset(memo, 0, sizeof(memo));
+        memset(memo, 0, sizeof(memo));
 
-		memo[0] = 1;
+        memo[0] = 1;
 
-		for(int a = 0; a < M; a++)
-			for(int b = sum; b >= v[a]; b--)
-				memo[b] |= memo[b - v[a]];
+        for (int a = 0; a < M; a++)
+            for (int b = sum; b >= v[a]; b--)
+                memo[b] |= memo[b - v[a]];
 
-		int ans = INF;
+        int ans = INF;
 
-		for(int a = 0; a <= sum; a++)
-			if(memo[a])
-				ans = min(ans, abs(2 * a - sum));
+        for (int a = 0; a <= sum; a++)
+            if (memo[a])
+                ans = min(ans, abs(2 * a - sum));
 
-		printf("%d\n", ans);
-	}
-
+        printf("%d\n", ans);
+    }
 }

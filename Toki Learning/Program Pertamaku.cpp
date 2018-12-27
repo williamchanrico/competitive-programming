@@ -2,7 +2,8 @@
 
 char inp[1000];
 
-int main(){
-	gets(inp);
-	puts(inp);
+int main()
+{
+    gets(inp);
+    puts(inp);
 }

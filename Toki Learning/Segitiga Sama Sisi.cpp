@@ -1,12 +1,13 @@
 #include <stdio.h>
 
-int main(){
+int main()
+{
     int x = 20;
-    for(int y=1;y<=x;y++){
-        for(int z=x-1;z>=y;z--){
+    for (int y = 1; y <= x; y++) {
+        for (int z = x - 1; z >= y; z--) {
             printf(" ");
         }
-        for(int a=1;a<=y;a++){
+        for (int a = 1; a <= y; a++) {
             printf("* ");
         }
         printf("\n");
@@ -34,4 +35,3 @@ int main(){
  * * * * * * * * * * * * * * * * * * *
 * * * * * * * * * * * * * * * * * * * *
 */
-

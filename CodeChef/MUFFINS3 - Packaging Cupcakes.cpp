@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	while(T--){
-		int N;
+    while (T--) {
+        int N;
 
-		scanf("%d", &N);
+        scanf("%d", &N);
 
-		printf("%d\n", N / 2 + 1);
-	}
+        printf("%d\n", N / 2 + 1);
+    }
 }

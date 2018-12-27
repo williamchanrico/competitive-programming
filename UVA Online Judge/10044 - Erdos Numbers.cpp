@@ -3,92 +3,94 @@ using namespace std;
 
 #define INF 0x3f3f3f3f
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	cin >> T;
+    cin >> T;
 
-	for(int TC = 1; TC <= T; TC++){
-		string inp;
-		map<string, int> m;
-		vector<vector<int> > adjList(10000);
-		int P, N, count = 0;
+    for (int TC = 1; TC <= T; TC++) {
+        string inp;
+        map<string, int> m;
+        vector<vector<int>> adjList(10000);
+        int P, N, count = 0;
 
-		cin >> P >> N;
-		
-		cin.ignore(INT_MAX, '\n');
+        cin >> P >> N;
 
-		m["Erdos, P."] = count++;
+        cin.ignore(INT_MAX, '\n');
 
-		while(P--){
-			vector<string> v;
-			int sPos = 0, ePos = 0;
+        m["Erdos, P."] = count++;
 
-			getline(cin, inp);
-			
-			while( (ePos = inp.find(".,", sPos)) != string::npos){
-				v.push_back(inp.substr(sPos, ePos - sPos + 1));
+        while (P--) {
+            vector<string> v;
+            int sPos = 0, ePos = 0;
 
-				sPos = ePos + 3;
-			}
+            getline(cin, inp);
 
-			ePos = inp.find(".:");
+            while ((ePos = inp.find(".,", sPos)) != string::npos) {
+                v.push_back(inp.substr(sPos, ePos - sPos + 1));
 
-			v.push_back(inp.substr(sPos, ePos - sPos + 1));
+                sPos = ePos + 3;
+            }
 
-			for(int a = 0; a < v.size(); a++)
-				if(!m.count(v[a]))
-					m[v[a]] = count++;
-			
-			for(int a = 0; a < v.size(); a++){
-				for(int b = 0; b < a; b++){
-					adjList[m[v[a]]].push_back(m[v[b]]);
-					adjList[m[v[b]]].push_back(m[v[a]]);
-				}
-			}
-		}
+            ePos = inp.find(".:");
 
-		cout << "Scenario " << TC << "\n";
+            v.push_back(inp.substr(sPos, ePos - sPos + 1));
 
-		while(N--){
-			getline(cin, inp);
+            for (int a = 0; a < v.size(); a++)
+                if (!m.count(v[a]))
+                    m[v[a]] = count++;
 
-			int ans = -1;
-			queue<int> q;
-			vector<int> dist(count, INF);
+            for (int a = 0; a < v.size(); a++) {
+                for (int b = 0; b < a; b++) {
+                    adjList[m[v[a]]].push_back(m[v[b]]);
+                    adjList[m[v[b]]].push_back(m[v[a]]);
+                }
+            }
+        }
 
-			q.push(m[inp]);
+        cout << "Scenario " << TC << "\n";
 
-			dist[m[inp]] = 0;
+        while (N--) {
+            getline(cin, inp);
 
-			while(!q.empty()){
-				int u = q.front();
+            int ans = -1;
+            queue<int> q;
+            vector<int> dist(count, INF);
 
-				q.pop();
+            q.push(m[inp]);
 
-				for(int a = 0; a < adjList[u].size(); a++){
-					int v = adjList[u][a];
+            dist[m[inp]] = 0;
 
-					if(dist[v] == INF){
-						dist[v] = dist[u] + 1;
+            while (!q.empty()) {
+                int u = q.front();
 
-						if(v == 0){
-							ans = dist[v];
+                q.pop();
 
-							break;
-						}
+                for (int a = 0; a < adjList[u].size(); a++) {
+                    int v = adjList[u][a];
 
-						q.push(v);
-					}
-				}
+                    if (dist[v] == INF) {
+                        dist[v] = dist[u] + 1;
 
-				if(ans != -1) break;
-			}
+                        if (v == 0) {
+                            ans = dist[v];
 
-			if(ans == -1)
-				cout << inp << " infinity\n";
-			else
-				cout << inp << " " << ans << "\n";
-		}
-	}
+                            break;
+                        }
+
+                        q.push(v);
+                    }
+                }
+
+                if (ans != -1)
+                    break;
+            }
+
+            if (ans == -1)
+                cout << inp << " infinity\n";
+            else
+                cout << inp << " " << ans << "\n";
+        }
+    }
 }

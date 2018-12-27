@@ -1,49 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int N;
+int main()
+{
+    int N;
 
-	while(scanf("%d", &N), N){
-		int L, A, B;
-		vector<vector<int> > adjList(N);
+    while (scanf("%d", &N), N) {
+        int L, A, B;
+        vector<vector<int>> adjList(N);
 
-		scanf("%d", &L);
+        scanf("%d", &L);
 
-		for(int a = 0; a < L; a++){
-			scanf("%d %d", &A, &B);
+        for (int a = 0; a < L; a++) {
+            scanf("%d %d", &A, &B);
 
-			adjList[A].push_back(B);
-			adjList[B].push_back(A);
-		}
+            adjList[A].push_back(B);
+            adjList[B].push_back(A);
+        }
 
-		bool ans = true;
-		vector<int> color(N, -1);
-		queue<int> q;
+        bool ans = true;
+        vector<int> color(N, -1);
+        queue<int> q;
 
-		q.push(0);
-		color[0] = 1;
+        q.push(0);
+        color[0] = 1;
 
-		while(!q.empty()){
-			int front = q.front();
+        while (!q.empty()) {
+            int front = q.front();
 
-			q.pop();
+            q.pop();
 
-			for(int a = 0; a < adjList[front].size(); a++){
-				int next = adjList[front][a];
+            for (int a = 0; a < adjList[front].size(); a++) {
+                int next = adjList[front][a];
 
-				if(color[next] == -1){
-					color[next] = 1 - color[front];
-					
-					q.push(next);
-				}else if(color[next] == color[front]){
-					ans = false;
+                if (color[next] == -1) {
+                    color[next] = 1 - color[front];
 
-					break;
-				}
-			}
-		}
+                    q.push(next);
+                } else if (color[next] == color[front]) {
+                    ans = false;
 
-		printf("%s\n", (ans ? "BICOLORABLE." : "NOT BICOLORABLE."));
-	}
+                    break;
+                }
+            }
+        }
+
+        printf("%s\n", (ans ? "BICOLORABLE." : "NOT BICOLORABLE."));
+    }
 }

@@ -4,96 +4,100 @@ using namespace std;
 #define MOD 1000000000
 #define MAX_STATE 100
 
-class Matrix{
+class Matrix {
 public:
-	int row, col, val[MAX_STATE][MAX_STATE];
+    int row, col, val[MAX_STATE][MAX_STATE];
 
-	Matrix(){}
+    Matrix() {}
 
-	Matrix(int row, int col, int diagonalValue = 0){
-		memset(val, 0, sizeof(val));
+    Matrix(int row, int col, int diagonalValue = 0)
+    {
+        memset(val, 0, sizeof(val));
 
-		this->row = row;
-		this->col = col;
+        this->row = row;
+        this->col = col;
 
-		for(int a = 0; a < row; a++)
-			val[a][a] = diagonalValue;
-	}
+        for (int a = 0; a < row; a++)
+            val[a][a] = diagonalValue;
+    }
 
-	Matrix operator*(const Matrix &x) const{
-		Matrix ans(row, x.col);
+    Matrix operator*(const Matrix& x) const
+    {
+        Matrix ans(row, x.col);
 
-		for(int a = 0; a < row; a++){
-			for(int b = 0; b < x.row; b++){
-				long long temp = 0;
+        for (int a = 0; a < row; a++) {
+            for (int b = 0; b < x.row; b++) {
+                long long temp = 0;
 
-				for(int c = 0; c < col; c++){
-					temp += ((long long) val[a][c] * x.val[c][b]) % MOD;
-				}
+                for (int c = 0; c < col; c++) {
+                    temp += ((long long)val[a][c] * x.val[c][b]) % MOD;
+                }
 
-				ans.val[a][b] = temp % MOD;
-			}
-		}
+                ans.val[a][b] = temp % MOD;
+            }
+        }
 
-		return ans;
-	}
+        return ans;
+    }
 
-	Matrix operator^(long long x) const{
-		Matrix curr = *this;
-		Matrix ans(row, col, 1);
+    Matrix operator^(long long x) const
+    {
+        Matrix curr = *this;
+        Matrix ans(row, col, 1);
 
-		while(x){
-			if(x & 1)
-				ans = ans * curr;
-			x >>= 1;
-			curr = curr * curr;
-		}
+        while (x) {
+            if (x & 1)
+                ans = ans * curr;
+            x >>= 1;
+            curr = curr * curr;
+        }
 
-		return ans;
-	}
+        return ans;
+    }
 
-	void print(){
-		printf("=====\n");
-		for(int a = 0; a < row; a++){
-			for(int b = 0; b < col; b++)
-				printf("%d ", val[a][b]);
-			printf("\n");
-		}
-		printf("=====\n");
-	}
+    void print()
+    {
+        printf("=====\n");
+        for (int a = 0; a < row; a++) {
+            for (int b = 0; b < col; b++)
+                printf("%d ", val[a][b]);
+            printf("\n");
+        }
+        printf("=====\n");
+    }
 };
 
-int main(){
-	int TC;
+int main()
+{
+    int TC;
 
-	scanf("%d", &TC);
+    scanf("%d", &TC);
 
-	while(TC--){
-		int N, K;
+    while (TC--) {
+        int N, K;
 
-		scanf("%d", &K);
+        scanf("%d", &K);
 
-		Matrix F(K, 1);
+        Matrix F(K, 1);
 
-		for(int a = 0; a < K; a++)
-			scanf("%d", &F.val[a][0]);
+        for (int a = 0; a < K; a++)
+            scanf("%d", &F.val[a][0]);
 
-		Matrix T(K, K);
+        Matrix T(K, K);
 
-		for(int a = 0; a < (K - 1); a++)
-			T.val[a][a + 1] = 1;
+        for (int a = 0; a < (K - 1); a++)
+            T.val[a][a + 1] = 1;
 
-		for(int a = K - 1; a >= 0; a--)
-			scanf("%d", &T.val[K - 1][a]);
+        for (int a = K - 1; a >= 0; a--)
+            scanf("%d", &T.val[K - 1][a]);
 
-		scanf("%d", &N);
+        scanf("%d", &N);
 
-		Matrix ans = (T ^ (N - 1)) * F;
+        Matrix ans = (T ^ (N - 1)) * F;
 
-		printf("%d\n", ans.val[0][0]);
-	}
+        printf("%d\n", ans.val[0][0]);
+    }
 }
-
 
 /*
 #include <bits/stdc++.h>

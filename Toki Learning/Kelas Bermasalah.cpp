@@ -3,29 +3,30 @@
 using namespace std;
 
 vector<double> v;
-double Jml=0, temp;
+double Jml = 0, temp;
 
-int main(){
-	int T, n;
-	
-	scanf("%d", &T);
-	while(T>0){
-		scanf("%d", &n);
-		double Jml=0;
-		for(int a=0;a<n;a++){
-			scanf("%lf", &temp);
-			v.push_back(temp);
-			Jml+=temp;
-		}
-		Jml/=n;
-		int ans=0;
-		for(int a=0;a<n;a++)
-			if(v[a]<Jml)
-				ans++;
-		printf("%d\n", ans);
-		v.clear();
-		T--;
-	}
+int main()
+{
+    int T, n;
+
+    scanf("%d", &T);
+    while (T > 0) {
+        scanf("%d", &n);
+        double Jml = 0;
+        for (int a = 0; a < n; a++) {
+            scanf("%lf", &temp);
+            v.push_back(temp);
+            Jml += temp;
+        }
+        Jml /= n;
+        int ans = 0;
+        for (int a = 0; a < n; a++)
+            if (v[a] < Jml)
+                ans++;
+        printf("%d\n", ans);
+        v.clear();
+        T--;
+    }
 }
 
 /*

@@ -1,207 +1,211 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node{
-	int key;
-	int height;
+struct Node {
+    int key;
+    int height;
 
-	struct Node *left;
-	struct Node *right;
+    struct Node* left;
+    struct Node* right;
 };
 
-int getHeight(struct Node *root){
-	return (root ? root->height : 0);
+int getHeight(struct Node* root)
+{
+    return (root ? root->height : 0);
 }
 
-int getBalance(struct Node *root){
-	return (root ? getHeight(root->left) - getHeight(root->right) : 0);
+int getBalance(struct Node* root)
+{
+    return (root ? getHeight(root->left) - getHeight(root->right) : 0);
 }
 
-struct Node *leftRotate(struct Node *root){
-	struct Node *r = root->right;
-	struct Node *rl = r->left;
+struct Node* leftRotate(struct Node* root)
+{
+    struct Node* r = root->right;
+    struct Node* rl = r->left;
 
-	r->left = root;
-	root->right = rl;
+    r->left = root;
+    root->right = rl;
 
-	root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
-	r->height = max(getHeight(r->left), getHeight(r->right)) + 1;
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    r->height = max(getHeight(r->left), getHeight(r->right)) + 1;
 
-	return r;
+    return r;
 }
 
-struct Node *rightRotate(struct Node *root){
-	struct Node *l = root->left;
-	struct Node *lr = l->right;
+struct Node* rightRotate(struct Node* root)
+{
+    struct Node* l = root->left;
+    struct Node* lr = l->right;
 
-	l->right = root;
-	root->left = lr;
+    l->right = root;
+    root->left = lr;
 
-	root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
-	l->height = max(getHeight(l->left), getHeight(l->right)) + 1;
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    l->height = max(getHeight(l->left), getHeight(l->right)) + 1;
 
-	return l;
+    return l;
 }
 
-struct Node *push(struct Node *root, int key){
+struct Node* push(struct Node* root, int key)
+{
 
-	if(root == NULL){
-		struct Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+    if (root == NULL) {
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
 
-		newNode->key = key;
-		newNode->height = 1;
-		newNode->left = NULL;
-		newNode->right = NULL;
+        newNode->key = key;
+        newNode->height = 1;
+        newNode->left = NULL;
+        newNode->right = NULL;
 
-		return newNode;
+        return newNode;
 
-	}else if(key < root->key){
+    } else if (key < root->key) {
 
-		root->left = push(root->left, key);
+        root->left = push(root->left, key);
 
-	}else{
+    } else {
 
-		root->right = push(root->right, key);
+        root->right = push(root->right, key);
+    }
 
-	}
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
 
-	root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    int balance = getBalance(root);
 
-	int balance = getBalance(root);
+    if (balance > 1 && key < root->left->key) {
+        return rightRotate(root);
+    }
 
-	if(balance > 1 && key < root->left->key){
-		return rightRotate(root);
-	}
+    if (balance > 1 && key > root->left->key) {
+        root->left = leftRotate(root->left);
 
-	if(balance > 1 && key > root->left->key){
-		root->left = leftRotate(root->left);
+        return rightRotate(root);
+    }
 
-		return rightRotate(root);
-	}
+    if (balance < -1 && key < root->right->key) {
+        root->right = rightRotate(root->right);
 
-	if(balance < -1 && key < root->right->key){
-		root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
 
-		return leftRotate(root);
-	}
+    if (balance < -1 && key > root->right->key) {
+        return leftRotate(root);
+    }
 
-	if(balance < -1 && key > root->right->key){
-		return leftRotate(root);
-	}
-
-	return root;
-
+    return root;
 }
 
-struct Node *findLeftMost(struct Node *root){
+struct Node* findLeftMost(struct Node* root)
+{
 
-	if(root->left)
-		return findLeftMost(root->left);
+    if (root->left)
+        return findLeftMost(root->left);
 
-	return root;
-
+    return root;
 }
 
-struct Node *deleteNode(struct Node *root, int key){
+struct Node* deleteNode(struct Node* root, int key)
+{
 
-	if(root == NULL) return NULL;
-	
-	if(key < root->key){
+    if (root == NULL)
+        return NULL;
 
-		root->left = deleteNode(root->left, key);
+    if (key < root->key) {
 
-	}else if(key > root->key){
+        root->left = deleteNode(root->left, key);
 
-		root->right = deleteNode(root->right, key);
+    } else if (key > root->key) {
 
-	}else{
+        root->right = deleteNode(root->right, key);
 
-		if(!root->left || !root->right){
+    } else {
 
-			struct Node *temp = (root->left ? root->left : root->right);
+        if (!root->left || !root->right) {
 
-			if(temp){
-				*root = *temp;
-			}else{
-				temp = root;
-				root = NULL;
-			}
+            struct Node* temp = (root->left ? root->left : root->right);
 
-			free(temp);
+            if (temp) {
+                *root = *temp;
+            } else {
+                temp = root;
+                root = NULL;
+            }
 
-		}else{
+            free(temp);
 
-			struct Node *temp = findLeftMost(root->right);
+        } else {
 
-			root->key = temp->key;
+            struct Node* temp = findLeftMost(root->right);
 
-			root->right = deleteNode(root->right, temp->key);
+            root->key = temp->key;
 
-		}
-	}
+            root->right = deleteNode(root->right, temp->key);
+        }
+    }
 
-	if(root == NULL) return NULL;
+    if (root == NULL)
+        return NULL;
 
-	root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+    root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
 
-	int balance = getBalance(root);
+    int balance = getBalance(root);
 
-	if(balance > 1 && getBalance(root->left) >= 0){
-		return rightRotate(root);
-	}
+    if (balance > 1 && getBalance(root->left) >= 0) {
+        return rightRotate(root);
+    }
 
-	if(balance > 1 && getBalance(root->left) < 0){
-		root->left = leftRotate(root->left);
+    if (balance > 1 && getBalance(root->left) < 0) {
+        root->left = leftRotate(root->left);
 
-		return rightRotate(root);
-	}
+        return rightRotate(root);
+    }
 
-	if(balance < -1 && getBalance(root->right) <= 0){
-		return leftRotate(root);
-	}
+    if (balance < -1 && getBalance(root->right) <= 0) {
+        return leftRotate(root);
+    }
 
-	if(balance < -1 && getBalance(root->right) > 0){
-		root->right = rightRotate(root->right);
+    if (balance < -1 && getBalance(root->right) > 0) {
+        root->right = rightRotate(root->right);
 
-		return leftRotate(root);
-	}
+        return leftRotate(root);
+    }
 
-	return root;
+    return root;
 }
 
-void view(struct Node *root){
+void view(struct Node* root)
+{
 
-	if(root != NULL){
+    if (root != NULL) {
 
-		view(root->left);
-		printf("%d ", root->key);
-		view(root->right);
-
-	}
-
+        view(root->left);
+        printf("%d ", root->key);
+        view(root->right);
+    }
 }
 
-int main(){
+int main()
+{
 
-	struct Node *root = NULL;
+    struct Node* root = NULL;
 
-	root = push(root, 1);
-	root = push(root, 48);
-	root = push(root, 13);
-	root = push(root, 10);
-	root = push(root, 69);
-	root = push(root, 35);
-	root = push(root, 21);
+    root = push(root, 1);
+    root = push(root, 48);
+    root = push(root, 13);
+    root = push(root, 10);
+    root = push(root, 69);
+    root = push(root, 35);
+    root = push(root, 21);
 
+    root = deleteNode(root, 13);
+    root = deleteNode(root, 21);
+    root = deleteNode(root, 1);
+    root = deleteNode(root, 48);
+    root = deleteNode(root, 69);
+    root = deleteNode(root, 35);
 
-	root = deleteNode(root, 13);
-	root = deleteNode(root, 21);
-	root = deleteNode(root, 1);
-	root = deleteNode(root, 48);
-	root = deleteNode(root, 69);
-	root = deleteNode(root, 35);
-	
-	view(root);
+    view(root);
 }
 
 /* Class version AVL with case example UVA 417 - Word Index

@@ -3,62 +3,67 @@
 int T, n, m;
 char graph[100][100];
 
-void dfs(int x, int y){
-	if(graph[x][y]==' ' && x<n && y<m && x>=0 && y>=0){
-		graph[x][y]='.';
-		dfs(x+1, y);
-		dfs(x-1, y);
-		dfs(x, y+1);
-		dfs(x, y-1);
-	}
+void dfs(int x, int y)
+{
+    if (graph[x][y] == ' ' && x < n && y < m && x >= 0 && y >= 0) {
+        graph[x][y] = '.';
+        dfs(x + 1, y);
+        dfs(x - 1, y);
+        dfs(x, y + 1);
+        dfs(x, y - 1);
+    }
 }
 
-void cekgraph(){
-	for(int a=0;a<n;a++){
-		puts(graph[a]);
-	}
+void cekgraph()
+{
+    for (int a = 0; a < n; a++) {
+        puts(graph[a]);
+    }
 }
 
-void cek(){
-	for(int a=0;a<n;a++)
-		for(int b=0;b<m;b++){
-			if(graph[a][b]==' '){
-				printf("YA\n");
-				//cekgraph();
-				return;
-			}
-		}
-	printf("TIDAK\n");
-	//cekgraph();
+void cek()
+{
+    for (int a = 0; a < n; a++)
+        for (int b = 0; b < m; b++) {
+            if (graph[a][b] == ' ') {
+                printf("YA\n");
+                //cekgraph();
+                return;
+            }
+        }
+    printf("TIDAK\n");
+    //cekgraph();
 }
 
-int main(){
-	scanf("%d", &T);
-	while(T--){
-		scanf("%d%d", &n, &m);
-		getchar();
-		for(int a=0;a<n;a++)
-			gets(graph[a]);
-		int x=0, y=0, yy=m-1;
-		while(x<n){
-			if(graph[x][y]==' ')
-				dfs(x, y);
-			if(graph[x][yy]==' ')
-				dfs(x, yy);
-			x++;
-		}
-		x=0; y=0; yy=n-1;
-		while(y<m){
-			if(graph[x][y]==' ')
-				dfs(x, y);
-			if(graph[yy][y]==' ')
-				dfs(yy, y);
-			y++;
-		}
-		cek();	
-	}
+int main()
+{
+    scanf("%d", &T);
+    while (T--) {
+        scanf("%d%d", &n, &m);
+        getchar();
+        for (int a = 0; a < n; a++)
+            gets(graph[a]);
+        int x = 0, y = 0, yy = m - 1;
+        while (x < n) {
+            if (graph[x][y] == ' ')
+                dfs(x, y);
+            if (graph[x][yy] == ' ')
+                dfs(x, yy);
+            x++;
+        }
+        x = 0;
+        y = 0;
+        yy = n - 1;
+        while (y < m) {
+            if (graph[x][y] == ' ')
+                dfs(x, y);
+            if (graph[yy][y] == ' ')
+                dfs(yy, y);
+            y++;
+        }
+        cek();
+    }
 }
-
 
 /*
 

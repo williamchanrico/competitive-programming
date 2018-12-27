@@ -3,38 +3,38 @@ using namespace std;
 
 typedef pair<int, int> pii;
 
-int main(){
-	int N, M;
-	map<pii, pii> m;
+int main()
+{
+    int N, M;
+    map<pii, pii> m;
 
-	scanf("%d %d", &N, &M);
+    scanf("%d %d", &N, &M);
 
-	int id, attr, val, priority;
+    int id, attr, val, priority;
 
-	while(N--){
-		scanf("%d %d %d %d", &id, &attr, &val, &priority);
+    while (N--) {
+        scanf("%d %d %d %d", &id, &attr, &val, &priority);
 
-		pii u = make_pair(id, attr);
+        pii u = make_pair(id, attr);
 
-		if(m.count(u)){
+        if (m.count(u)) {
 
-			if(m[u].second <= priority){
-				m[u].first = val;
-				m[u].second = priority;
-			}
+            if (m[u].second <= priority) {
+                m[u].first = val;
+                m[u].second = priority;
+            }
 
-		}else{
+        } else {
 
-			m[u] = make_pair(val, priority);
+            m[u] = make_pair(val, priority);
+        }
+    }
 
-		}
-	}
+    while (M--) {
+        scanf("%d %d", &id, &attr);
 
-	while(M--){
-		scanf("%d %d", &id, &attr);
-
-		printf("%d\n", m[make_pair(id, attr)].first);
-	}
+        printf("%d\n", m[make_pair(id, attr)].first);
+    }
 }
 
 /*

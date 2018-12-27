@@ -4,92 +4,95 @@ using namespace std;
 int N;
 char ans[110][110];
 bitset<110> visitA, visitB;
-vector<vector<int> > adjList;
+vector<vector<int>> adjList;
 
-void dfs(int x, int block){
-	if(block == -1){
-		if(!visitA[x])
-			return;
+void dfs(int x, int block)
+{
+    if (block == -1) {
+        if (!visitA[x])
+            return;
 
-		visitA[x] = 0;
+        visitA[x] = 0;
 
-	}else{
-		if(!visitB[x] || x == block)
-			return;
+    } else {
+        if (!visitB[x] || x == block)
+            return;
 
-		visitB[x] = 0;
-	}
+        visitB[x] = 0;
+    }
 
-	for(int a = 0; a < adjList[x].size(); a++)
-		dfs(adjList[x][a], block);
+    for (int a = 0; a < adjList[x].size(); a++)
+        dfs(adjList[x][a], block);
 }
 
-void printAns(){
-	for(int a = 0; a < N; a++){
-			
-		printf("+");
-		
-		for(int b = 0; b < (2 * N - 1); b++)
-			printf("-");
-		
-		printf("+\n|");
+void printAns()
+{
+    for (int a = 0; a < N; a++) {
 
-		for(int b = 0; b < N; b++)
-			printf("%c|", ans[a][b]);
-		
-		printf("\n");
-	}
+        printf("+");
 
-	printf("+");
-		
-	for(int a = 0; a < (2 * N - 1); a++)
-		printf("-");
-	
-	printf("+\n");
+        for (int b = 0; b < (2 * N - 1); b++)
+            printf("-");
+
+        printf("+\n|");
+
+        for (int b = 0; b < N; b++)
+            printf("%c|", ans[a][b]);
+
+        printf("\n");
+    }
+
+    printf("+");
+
+    for (int a = 0; a < (2 * N - 1); a++)
+        printf("-");
+
+    printf("+\n");
 }
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	for(int TC = 1; TC <= T; TC++){
-		int inp;
+    for (int TC = 1; TC <= T; TC++) {
+        int inp;
 
-		scanf("%d", &N);
+        scanf("%d", &N);
 
-		adjList.assign(N, vector<int>());
+        adjList.assign(N, vector<int>());
 
-		for(int a = 0; a < N; a++){
-			for(int b = 0; b < N; b++){
-				scanf("%d", &inp);
+        for (int a = 0; a < N; a++) {
+            for (int b = 0; b < N; b++) {
+                scanf("%d", &inp);
 
-				if(inp) adjList[a].push_back(b);
-			}
-		}
-		
-		visitA.set();
+                if (inp)
+                    adjList[a].push_back(b);
+            }
+        }
 
-		dfs(0, -1);
+        visitA.set();
 
-		for(int a = 0; a < N; a++){
-			visitB.set();
+        dfs(0, -1);
 
-			dfs(0, a);
+        for (int a = 0; a < N; a++) {
+            visitB.set();
 
-			for(int b = 0; b < N; b++){
-				if(visitA[b])
-					ans[a][b] = 'N';
-				else
-					if(visitB[b])
-						ans[a][b] = 'Y';
-					else
-						ans[a][b] = 'N';
-			}
-		}
+            dfs(0, a);
 
-		printf("Case %d:\n", TC);
+            for (int b = 0; b < N; b++) {
+                if (visitA[b])
+                    ans[a][b] = 'N';
+                else if (visitB[b])
+                    ans[a][b] = 'Y';
+                else
+                    ans[a][b] = 'N';
+            }
+        }
 
-		printAns();
-	}
+        printf("Case %d:\n", TC);
+
+        printAns();
+    }
 }

@@ -6,48 +6,51 @@ using namespace std;
 string str, strP;
 int backTable[MAX_N];
 
-void kmpPreprocess(){
-	int a = 0, b = -1;
+void kmpPreprocess()
+{
+    int a = 0, b = -1;
 
-	backTable[0] = -1;
+    backTable[0] = -1;
 
-	while(a < strP.size()){
-		while(b >= 0 && strP[a] != strP[b])
-			b = backTable[b];
+    while (a < strP.size()) {
+        while (b >= 0 && strP[a] != strP[b])
+            b = backTable[b];
 
-		a++;
-		b++;
+        a++;
+        b++;
 
-		backTable[a] = b;
-	}
+        backTable[a] = b;
+    }
 }
 
-int kmpSearch(){
-	int a = 0, b = 0, ans = 0;
+int kmpSearch()
+{
+    int a = 0, b = 0, ans = 0;
 
-	while(a < str.size()){
-		while(b >= 0 && str[a] != strP[b])
-			b = backTable[b];
+    while (a < str.size()) {
+        while (b >= 0 && str[a] != strP[b])
+            b = backTable[b];
 
-		a++;
-		b++;
+        a++;
+        b++;
 
-		if(b == strP.size()){
-			ans++;
+        if (b == strP.size()) {
+            ans++;
 
-			b = backTable[b];
-		}
-	}
+            b = backTable[b];
+        }
+    }
 
-	return ans;
+    return ans;
 }
 
-int main(){
-	while(cin >> strP, strP[0] != '.'){
-		str = strP + strP;
+int main()
+{
+    while (cin >> strP, strP[0] != '.') {
+        str = strP + strP;
 
-		kmpPreprocess();
+        kmpPreprocess();
 
-		cout << kmpSearch() - 1 << "\n";
-	}
+        cout << kmpSearch() - 1 << "\n";
+    }
 }

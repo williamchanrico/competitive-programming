@@ -1,184 +1,209 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class BigInt{
+class BigInt {
 public:
-	int sign;
-	string s;
+    int sign;
+    string s;
 
-	BigInt() : s("") {}
+    BigInt()
+        : s("")
+    {
+    }
 
-	BigInt(string x){
-		*this = x;
-	}
+    BigInt(string x)
+    {
+        *this = x;
+    }
 
-	BigInt negative(){
-		sign *= -1;
+    BigInt negative()
+    {
+        sign *= -1;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	BigInt normalize(int newSign){
-		for(int a = s.size() - 1; a > 0 && s[a] == '0'; a--)
-			s.erase(s.begin() + a);
+    BigInt normalize(int newSign)
+    {
+        for (int a = s.size() - 1; a > 0 && s[a] == '0'; a--)
+            s.erase(s.begin() + a);
 
-		sign = (s.size() == 1 && s[0] == '0' ? 1 : newSign);
+        sign = (s.size() == 1 && s[0] == '0' ? 1 : newSign);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void operator =(string x){
-		int newSign = (x[0] == '-' ? -1 : 1);
+    void operator=(string x)
+    {
+        int newSign = (x[0] == '-' ? -1 : 1);
 
-		s = (newSign == -1 ? x.substr(1) : x);
+        s = (newSign == -1 ? x.substr(1) : x);
 
-		reverse(s.begin(), s.end());
+        reverse(s.begin(), s.end());
 
-		this->normalize(newSign);
-	}
+        this->normalize(newSign);
+    }
 
-	bool operator <(const BigInt &x) const{
-		if(sign != x.sign) return sign < x.sign;
+    bool operator<(const BigInt& x) const
+    {
+        if (sign != x.sign)
+            return sign < x.sign;
 
-		if(s.size() != x.s.size())
-			return (sign == 1 ? s.size() < x.s.size() : s.size() > x.s.size());
+        if (s.size() != x.s.size())
+            return (sign == 1 ? s.size() < x.s.size() : s.size() > x.s.size());
 
-		for(int a = s.size() - 1; a >= 0; a--) if(s[a] != x.s[a])
-			return (sign == 1 ? s[a] < x.s[a] : s[a] > x.s[a]);
+        for (int a = s.size() - 1; a >= 0; a--)
+            if (s[a] != x.s[a])
+                return (sign == 1 ? s[a] < x.s[a] : s[a] > x.s[a]);
 
-		return false;
-	}
+        return false;
+    }
 
-	bool operator ==(const BigInt &x) const{
-		return (s == x.s && sign == x.sign);
-	}
+    bool operator==(const BigInt& x) const
+    {
+        return (s == x.s && sign == x.sign);
+    }
 
-	BigInt operator +(BigInt x){
-		if(sign != x.sign) return *this - x.negative();
+    BigInt operator+(BigInt x)
+    {
+        if (sign != x.sign)
+            return *this - x.negative();
 
-		BigInt res;
+        BigInt res;
 
-		for(int a = 0, carry = 0; a < s.size() || a < x.s.size() || carry; a++){
-			carry += (a < s.size() ? s[a] - '0' : 0) + (a < x.s.size() ? x.s[a] - '0' : 0);
+        for (int a = 0, carry = 0; a < s.size() || a < x.s.size() || carry; a++) {
+            carry += (a < s.size() ? s[a] - '0' : 0) + (a < x.s.size() ? x.s[a] - '0' : 0);
 
-			res.s += (carry % 10 + '0');
+            res.s += (carry % 10 + '0');
 
-			carry /= 10;
-		}
+            carry /= 10;
+        }
 
-		return res.normalize(sign);
-	}
+        return res.normalize(sign);
+    }
 
-	BigInt operator -(BigInt x){
-		if(sign != x.sign) return *this + x.negative();
+    BigInt operator-(BigInt x)
+    {
+        if (sign != x.sign)
+            return *this + x.negative();
 
-		int realSign = sign;
+        int realSign = sign;
 
-		sign = x.sign = 1;
+        sign = x.sign = 1;
 
-		if(*this < x) return ( (x - *this).negative()).normalize(-realSign);
+        if (*this < x)
+            return ((x - *this).negative()).normalize(-realSign);
 
-		BigInt res;
+        BigInt res;
 
-		for(int a = 0, borrow = 0; a < s.size(); a++){
-			borrow = (s[a] - borrow - (a < x.s.size() ? x.s[a] : '0'));
+        for (int a = 0, borrow = 0; a < s.size(); a++) {
+            borrow = (s[a] - borrow - (a < x.s.size() ? x.s[a] : '0'));
 
-			res.s += (borrow >= 0 ? borrow + '0' : borrow + '0' + 10);
+            res.s += (borrow >= 0 ? borrow + '0' : borrow + '0' + 10);
 
-			borrow = (borrow >= 0 ? 0 : 1);
-		}
+            borrow = (borrow >= 0 ? 0 : 1);
+        }
 
-		return res.normalize(realSign);
-	}
+        return res.normalize(realSign);
+    }
 
-	BigInt operator *(BigInt x){
-		BigInt res("0");
+    BigInt operator*(BigInt x)
+    {
+        BigInt res("0");
 
-		for(int a = 0, b = s[a] - '0'; a < s.size(); a++, b = s[a] -'0'){
-			while(b--) res = (res + x);
+        for (int a = 0, b = s[a] - '0'; a < s.size(); a++, b = s[a] - '0') {
+            while (b--)
+                res = (res + x);
 
-			x.s.insert(x.s.begin(), '0');
-		}
+            x.s.insert(x.s.begin(), '0');
+        }
 
-		return res.normalize(sign * x.sign);
-	}
+        return res.normalize(sign * x.sign);
+    }
 
-	BigInt operator /(BigInt x){
-		if(x.s.size() == 1 && x.s[0] == '0') x.s[0] /= (x.s[0] - '0');
+    BigInt operator/(BigInt x)
+    {
+        if (x.s.size() == 1 && x.s[0] == '0')
+            x.s[0] /= (x.s[0] - '0');
 
-		BigInt temp("0"), res;
+        BigInt temp("0"), res;
 
-		for(int a = 0; a < s.size(); a++)
-			res.s += "0";
-		
-		int newSign = sign * x.sign;
+        for (int a = 0; a < s.size(); a++)
+            res.s += "0";
 
-		x.sign = 1;
+        int newSign = sign * x.sign;
 
-		for(int a = s.size() - 1; a >= 0; a--){
-			temp.s.insert(temp.s.begin(), '0');
-			temp = temp + s.substr(a, 1);
+        x.sign = 1;
 
-			while(!(temp < x)){
-				temp = temp - x;
-				res.s[a]++;
-			}
-		}
+        for (int a = s.size() - 1; a >= 0; a--) {
+            temp.s.insert(temp.s.begin(), '0');
+            temp = temp + s.substr(a, 1);
 
-		return res.normalize(newSign);
-	}
+            while (!(temp < x)) {
+                temp = temp - x;
+                res.s[a]++;
+            }
+        }
 
-	BigInt operator %(BigInt x){
-		if(x.s.size() == 1 && x.s[0] == '0') x.s[0] /= (x.s[0] - '0');
+        return res.normalize(newSign);
+    }
 
-		BigInt res("0");
+    BigInt operator%(BigInt x)
+    {
+        if (x.s.size() == 1 && x.s[0] == '0')
+            x.s[0] /= (x.s[0] - '0');
 
-		x.sign = 1;
+        BigInt res("0");
 
-		for(int a = s.size() - 1; a >= 0; a--){
-			res.s.insert(res.s.begin(), '0');
+        x.sign = 1;
 
-			res = res + s.substr(a, 1);
+        for (int a = s.size() - 1; a >= 0; a--) {
+            res.s.insert(res.s.begin(), '0');
 
-			while(!(res < x))
-				res = res - x;
-		}
+            res = res + s.substr(a, 1);
 
-		return res.normalize(sign);
-	}
+            while (!(res < x))
+                res = res - x;
+        }
 
-	friend ostream &operator <<(ostream &os, const BigInt &x){
-		string ret = x.s;
+        return res.normalize(sign);
+    }
 
-		reverse(ret.begin(), ret.end());
+    friend ostream& operator<<(ostream& os, const BigInt& x)
+    {
+        string ret = x.s;
 
-		os << (x.sign == -1 ? "-" : "") << ret;
+        reverse(ret.begin(), ret.end());
 
-		return os;
-	}
+        os << (x.sign == -1 ? "-" : "") << ret;
 
-	operator string(){
-		string ret = s;
+        return os;
+    }
 
-		reverse(ret.begin(), ret.end());
+    operator string()
+    {
+        string ret = s;
 
-		return (sign == -1 ? "-" : "") + s;
-	}
+        reverse(ret.begin(), ret.end());
+
+        return (sign == -1 ? "-" : "") + s;
+    }
 };
 
-int main(){
-	string N;
+int main()
+{
+    string N;
 
-	while(cin >> N, (N != "0")){
-		int D = (N[N.size() - 1] - '0');
+    while (cin >> N, (N != "0")) {
+        int D = (N[N.size() - 1] - '0');
 
-		N.erase(N.size() - 1, 1);
-		
-		BigInt A(N), B(to_string(5 * D));
+        N.erase(N.size() - 1, 1);
 
-		if((A - B) % BigInt("17") == BigInt("0"))
-			cout << 1 << "\n";
-		else
-			cout << 0 << "\n";
-	}
+        BigInt A(N), B(to_string(5 * D));
+
+        if ((A - B) % BigInt("17") == BigInt("0"))
+            cout << 1 << "\n";
+        else
+            cout << 0 << "\n";
+    }
 }

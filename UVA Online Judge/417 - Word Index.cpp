@@ -1,37 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	queue<string> q;
-	map<string, int> m;
+int main()
+{
+    queue<string> q;
+    map<string, int> m;
 
-	for(char a = 'a'; a <= 'z'; a++){
-		string s = string(1, a);
+    for (char a = 'a'; a <= 'z'; a++) {
+        string s = string(1, a);
 
-		q.push(s);
-	}
+        q.push(s);
+    }
 
-	int count = 1;
-	
-	while(!q.empty()){
-		string u = q.front();
+    int count = 1;
 
-		q.pop();
+    while (!q.empty()) {
+        string u = q.front();
 
-		m[u] = count++;
+        q.pop();
 
-		if(u.size() == 5)
-			continue;
+        m[u] = count++;
 
-		for(char a = u[u.size() - 1] + 1; a <= 'z'; a++)
-			q.push(u + a);
-	}
+        if (u.size() == 5)
+            continue;
 
-	char inp[10];
+        for (char a = u[u.size() - 1] + 1; a <= 'z'; a++)
+            q.push(u + a);
+    }
 
-	while(scanf("%s", inp) != EOF){
-		printf("%d\n", m[inp]);
-	}
+    char inp[10];
+
+    while (scanf("%s", inp) != EOF) {
+        printf("%d\n", m[inp]);
+    }
 }
 
 /*

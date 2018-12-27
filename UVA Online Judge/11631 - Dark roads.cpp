@@ -1,84 +1,87 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class UnionFind{
+class UnionFind {
 private:
-	int numSet;
-	vector<int> p, rank, setSize;
+    int numSet;
+    vector<int> p, rank, setSize;
 
 public:
-	UnionFind(int x){
-		p.assign(x, 0);
-		rank.assign(x, 0);
-		setSize.assign(x, 1);
+    UnionFind(int x)
+    {
+        p.assign(x, 0);
+        rank.assign(x, 0);
+        setSize.assign(x, 1);
 
-		numSet = x;
+        numSet = x;
 
-		for(int a = 0; a < x; a++)
-			p[a] = a;
-	}
+        for (int a = 0; a < x; a++)
+            p[a] = a;
+    }
 
-	int findSet(int x){ return (p[x] == x ? x : findSet(p[x])); }
-	
-	bool isSameSet(int x, int y){ return (findSet(x) == findSet(y)); }
+    int findSet(int x) { return (p[x] == x ? x : findSet(p[x])); }
 
-	void unionSet(int x, int y){
-		if(!isSameSet(x, y)){
-			numSet--;
+    bool isSameSet(int x, int y) { return (findSet(x) == findSet(y)); }
 
-			int a = findSet(x);
-			int b = findSet(y);
+    void unionSet(int x, int y)
+    {
+        if (!isSameSet(x, y)) {
+            numSet--;
 
-			if(rank[a] > rank[b]){
-				p[b] = a;
+            int a = findSet(x);
+            int b = findSet(y);
 
-				setSize[a] += setSize[b];
-			}else{
-				p[a] = b;
+            if (rank[a] > rank[b]) {
+                p[b] = a;
 
-				setSize[b] += setSize[a];
-				
-				if(rank[a] == rank[b]) rank[b]++;
-			}
-		}
-	}
+                setSize[a] += setSize[b];
+            } else {
+                p[a] = b;
 
-	int numOfSet(){ return numSet; }
+                setSize[b] += setSize[a];
 
-	int sizeOfSet(int x){ return setSize[findSet(x)]; }
+                if (rank[a] == rank[b])
+                    rank[b]++;
+            }
+        }
+    }
+
+    int numOfSet() { return numSet; }
+
+    int sizeOfSet(int x) { return setSize[findSet(x)]; }
 };
 
-int main(){
-	int M, N;
+int main()
+{
+    int M, N;
 
-	while(scanf("%d %d", &M, &N), M | N){
-		int X, Y, Z, sum = 0;
-		vector<pair<int, pair<int, int> > > edgeList;
+    while (scanf("%d %d", &M, &N), M | N) {
+        int X, Y, Z, sum = 0;
+        vector<pair<int, pair<int, int>>> edgeList;
 
-		for(int a = 0; a < N; a++){
-			scanf("%d %d %d", &X, &Y, &Z);
+        for (int a = 0; a < N; a++) {
+            scanf("%d %d %d", &X, &Y, &Z);
 
-			sum += Z;
+            sum += Z;
 
-			edgeList.push_back(make_pair(Z, make_pair(X, Y)));
-		}
+            edgeList.push_back(make_pair(Z, make_pair(X, Y)));
+        }
 
-		sort(edgeList.begin(), edgeList.end());
+        sort(edgeList.begin(), edgeList.end());
 
-		int mst = 0;
-		UnionFind UF(M);
+        int mst = 0;
+        UnionFind UF(M);
 
-		for(int a = 0; a < N; a++){
-			pair<int, pair<int, int> > u = edgeList[a];
+        for (int a = 0; a < N; a++) {
+            pair<int, pair<int, int>> u = edgeList[a];
 
-			if(!UF.isSameSet(u.second.first, u.second.second)){
-				mst += u.first;
+            if (!UF.isSameSet(u.second.first, u.second.second)) {
+                mst += u.first;
 
-				UF.unionSet(u.second.first, u.second.second);
-			}
-		}
+                UF.unionSet(u.second.first, u.second.second);
+            }
+        }
 
-		printf("%d\n", sum - mst);
-	}
-
+        printf("%d\n", sum - mst);
+    }
 }

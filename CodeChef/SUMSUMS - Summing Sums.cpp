@@ -5,49 +5,51 @@ using namespace std;
 
 long long N, T, C[51000];
 
-long long modPow(long long x, long long y, long long m){
-	long long ans = 1;
+long long modPow(long long x, long long y, long long m)
+{
+    long long ans = 1;
 
-	while(y > 0){
-		if(y % 2)
-			ans = (ans * x) % m;
+    while (y > 0) {
+        if (y % 2)
+            ans = (ans * x) % m;
 
-		y >>= 1;
+        y >>= 1;
 
-		x = (x * x) % m;
-	}
+        x = (x * x) % m;
+    }
 
-	return ans;
+    return ans;
 }
 
-long long inverse(long long x, long long m){
-	return modPow(x, m - 2, m);
+long long inverse(long long x, long long m)
+{
+    return modPow(x, m - 2, m);
 }
 
 // f(N, T) = (N^T + ((-1)^T * N)) / (N + 1)
 // T ganjil	-> 	next = f(N, T) + 1
 // T genap	-> 	next = f(N, T) - 1
 
-int main(){
-	scanf("%lld %lld", &N, &T);
+int main()
+{
+    scanf("%lld %lld", &N, &T);
 
-	for(int a = 0; a < N; a++)
-		scanf("%lld", &C[a]);
+    for (int a = 0; a < N; a++)
+        scanf("%lld", &C[a]);
 
-	long long temp1 = ((modPow(N - 1, T, MOD) + (T % 2 ? -(N - 1) : (N - 1))) * inverse(N, MOD)) % MOD;
-	long long temp2 = (T % 2 ? (temp1 + 1 + MOD) : (temp1 - 1)) % MOD;
-	long long sum = 0;
+    long long temp1 = ((modPow(N - 1, T, MOD) + (T % 2 ? -(N - 1) : (N - 1))) * inverse(N, MOD)) % MOD;
+    long long temp2 = (T % 2 ? (temp1 + 1 + MOD) : (temp1 - 1)) % MOD;
+    long long sum = 0;
 
-	for(int a = 0; a < N; a++)
-		sum = (sum + C[a]) % MOD;
+    for (int a = 0; a < N; a++)
+        sum = (sum + C[a]) % MOD;
 
-	for(int a = 0; a < N; a++){
-		long long ans = (C[a] * temp1 + ((sum - C[a] + MOD) % MOD) * temp2) % MOD;
+    for (int a = 0; a < N; a++) {
+        long long ans = (C[a] * temp1 + ((sum - C[a] + MOD) % MOD) * temp2) % MOD;
 
-		printf("%lld\n", ans);
-	}
+        printf("%lld\n", ans);
+    }
 }
-
 
 /*
 #include <bits/stdc++.h>

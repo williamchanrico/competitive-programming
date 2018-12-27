@@ -3,111 +3,113 @@ using namespace std;
 
 char grid[1100][1100];
 int R, C, joeGrid[1100][1100], fireGrid[1100][1100];
-int dx[] = {0, 1, 0, -1};
-int dy[] = {1, 0, -1, 0};
+int dx[] = { 0, 1, 0, -1 };
+int dy[] = { 1, 0, -1, 0 };
 
-typedef struct Point{
-	int X;
-	int Y;
+typedef struct Point {
+    int X;
+    int Y;
 } Point;
 
-bool validPoint(Point x){
-	return (x.X >= 0 && x.X < R && x.Y >= 0 && x.Y < C);
+bool validPoint(Point x)
+{
+    return (x.X >= 0 && x.X < R && x.Y >= 0 && x.Y < C);
 }
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	while(T--){
-		Point joe, fire;
-		bool joeFreakingSurvivedTheFireOfDeath = false;
+    while (T--) {
+        Point joe, fire;
+        bool joeFreakingSurvivedTheFireOfDeath = false;
 
-		memset(joeGrid, 0, sizeof(joeGrid));
-		memset(fireGrid, 0, sizeof(fireGrid));
-		
-		scanf("%d %d", &R, &C);
+        memset(joeGrid, 0, sizeof(joeGrid));
+        memset(fireGrid, 0, sizeof(fireGrid));
 
-		fire.X = fire.Y = -1;
+        scanf("%d %d", &R, &C);
 
-		for(int a = 0; a < R; a++){
-			scanf("%s", grid[a]);
+        fire.X = fire.Y = -1;
 
-			for(int b = 0; b < C; b++){
-				if(grid[a][b] == 'J'){
-					joe.X = a;
-					joe.Y = b;
-				}
-			}
-		}
+        for (int a = 0; a < R; a++) {
+            scanf("%s", grid[a]);
 
-		queue<Point> q;
+            for (int b = 0; b < C; b++) {
+                if (grid[a][b] == 'J') {
+                    joe.X = a;
+                    joe.Y = b;
+                }
+            }
+        }
 
-		for(int a = 0; a < R; a++){
-			for(int b = 0; b < C; b++){
-				if(grid[a][b] == 'F'){
-					fire.X = a;
-					fire.Y = b;
+        queue<Point> q;
 
-					q.push(fire);
+        for (int a = 0; a < R; a++) {
+            for (int b = 0; b < C; b++) {
+                if (grid[a][b] == 'F') {
+                    fire.X = a;
+                    fire.Y = b;
 
-					fireGrid[a][b] = 1;
-				}
-			}
-		}
+                    q.push(fire);
 
-		while(!q.empty()){
-			Point u = q.front();
+                    fireGrid[a][b] = 1;
+                }
+            }
+        }
 
-			q.pop();
+        while (!q.empty()) {
+            Point u = q.front();
 
-			for(int a = 0; a < 4; a++){
-				Point v;
-				v.X = u.X + dx[a];
-				v.Y = u.Y + dy[a];
+            q.pop();
 
-				if(validPoint(v) && grid[v.X][v.Y] != '#' && fireGrid[v.X][v.Y] == 0){
-					q.push(v);
+            for (int a = 0; a < 4; a++) {
+                Point v;
+                v.X = u.X + dx[a];
+                v.Y = u.Y + dy[a];
 
-					fireGrid[v.X][v.Y] = fireGrid[u.X][u.Y] + 1;
-				}
-			}
-		}
+                if (validPoint(v) && grid[v.X][v.Y] != '#' && fireGrid[v.X][v.Y] == 0) {
+                    q.push(v);
 
-		q.push(joe);
+                    fireGrid[v.X][v.Y] = fireGrid[u.X][u.Y] + 1;
+                }
+            }
+        }
 
-		joeGrid[joe.X][joe.Y] = 1;
+        q.push(joe);
 
-		while(!q.empty()){
-			Point u = q.front();
+        joeGrid[joe.X][joe.Y] = 1;
 
-			q.pop();
+        while (!q.empty()) {
+            Point u = q.front();
 
-			if(u.X == 0 || u.X == R - 1 || u.Y == 0 || u.Y == C - 1){
-				printf("%d\n", joeGrid[u.X][u.Y]);
+            q.pop();
 
-				joeFreakingSurvivedTheFireOfDeath = true;
+            if (u.X == 0 || u.X == R - 1 || u.Y == 0 || u.Y == C - 1) {
+                printf("%d\n", joeGrid[u.X][u.Y]);
 
-				break;
-			}
+                joeFreakingSurvivedTheFireOfDeath = true;
 
-			for(int a = 0; a < 4; a++){
-				Point v;
-				v.X = u.X + dx[a];
-				v.Y = u.Y + dy[a];
+                break;
+            }
 
-				if(validPoint(v) && grid[v.X][v.Y] != '#' && joeGrid[v.X][v.Y] == 0){
-					if(joeGrid[u.X][u.Y] + 1 < fireGrid[v.X][v.Y] || fireGrid[v.X][v.Y] == 0){
-						q.push(v);
+            for (int a = 0; a < 4; a++) {
+                Point v;
+                v.X = u.X + dx[a];
+                v.Y = u.Y + dy[a];
 
-						joeGrid[v.X][v.Y] = joeGrid[u.X][u.Y] + 1;
-					}
-				}
-			}
-		}
+                if (validPoint(v) && grid[v.X][v.Y] != '#' && joeGrid[v.X][v.Y] == 0) {
+                    if (joeGrid[u.X][u.Y] + 1 < fireGrid[v.X][v.Y] || fireGrid[v.X][v.Y] == 0) {
+                        q.push(v);
 
-		if(!joeFreakingSurvivedTheFireOfDeath)
-			printf("IMPOSSIBLE\n");
-	}
+                        joeGrid[v.X][v.Y] = joeGrid[u.X][u.Y] + 1;
+                    }
+                }
+            }
+        }
+
+        if (!joeFreakingSurvivedTheFireOfDeath)
+            printf("IMPOSSIBLE\n");
+    }
 }
