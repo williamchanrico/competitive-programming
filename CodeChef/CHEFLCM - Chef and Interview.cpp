@@ -1,26 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int T, N;
-	long long ans;
+int main()
+{
+    int T, N;
+    long long ans;
 
-	scanf("%d", &T);
+    scanf("%d", &T);
 
-	while(T--){
-		ans = 0;
+    while (T--) {
+        ans = 0;
 
-		scanf("%d", &N);
-		
-		for(int a = 1; a * a <= N; a++){
-			if(N % a == 0){
-				ans += a;
+        scanf("%d", &N);
 
-				if(a != N / a)
-					ans += N / a;
-			}
-		}
+        for (int a = 1; a * a <= N; a++) {
+            if (N % a == 0) {
+                ans += a;
 
-		printf("%lld\n", ans);
-	}
+                if (a != N / a)
+                    ans += N / a;
+            }
+        }
+
+        printf("%lld\n", ans);
+    }
 }

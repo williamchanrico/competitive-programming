@@ -4,19 +4,20 @@ using namespace std;
 string data[1005];
 int jmlData;
 
-int main(){
-	cin >> jmlData;
-	cin.ignore();
-	for(int a=0;a<jmlData;a++){
-		getline(cin, data[a]);
-		for(int b=0, len=data[a].length();b<len;b++)
-			data[a][b]=tolower(data[a][b]);
-		int temp=1;
-		for(int b=0;b<a;b++)
-			if(data[a]>=data[b])
-				temp++;
-		cout << temp << endl;
-	}
+int main()
+{
+    cin >> jmlData;
+    cin.ignore();
+    for (int a = 0; a < jmlData; a++) {
+        getline(cin, data[a]);
+        for (int b = 0, len = data[a].length(); b < len; b++)
+            data[a][b] = tolower(data[a][b]);
+        int temp = 1;
+        for (int b = 0; b < a; b++)
+            if (data[a] >= data[b])
+                temp++;
+        cout << temp << endl;
+    }
 }
 
 /*

@@ -1,35 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	scanf("%d", &T);
-	getchar();
+    scanf("%d", &T);
+    getchar();
 
-	while(T--){
-		char str[210];
-		int freq[30], maxi = -1;
+    while (T--) {
+        char str[210];
+        int freq[30], maxi = -1;
 
-		memset(freq, 0, sizeof(freq));
-		
-		fgets(str, 210, stdin);
+        memset(freq, 0, sizeof(freq));
 
-		for(int a = 0, len = strlen(str); a < len; a++){
-			if(isalpha(str[a])){
-				str[a] = tolower(str[a]);
+        fgets(str, 210, stdin);
 
-				freq[str[a] - 'a']++;
-			}
-		}
+        for (int a = 0, len = strlen(str); a < len; a++) {
+            if (isalpha(str[a])) {
+                str[a] = tolower(str[a]);
 
-		for(int a = 0; a < 26; a++)
-			maxi = max(maxi, freq[a]);
+                freq[str[a] - 'a']++;
+            }
+        }
 
-		for(int a = 0; a < 26; a++)
-			if(freq[a] == maxi)
-				printf("%c", a + 'a');
+        for (int a = 0; a < 26; a++)
+            maxi = max(maxi, freq[a]);
 
-		printf("\n");
-	}
+        for (int a = 0; a < 26; a++)
+            if (freq[a] == maxi)
+                printf("%c", a + 'a');
+
+        printf("\n");
+    }
 }

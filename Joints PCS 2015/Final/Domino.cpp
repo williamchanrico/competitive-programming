@@ -5,24 +5,26 @@ using namespace std;
 
 long long memo[10000];
 
-long long hitung(int x){
-	if(memo[x]!=-1)
-		return memo[x];
+long long hitung(int x)
+{
+    if (memo[x] != -1)
+        return memo[x];
 
-	if(x==0 || x==1)
-		return 1;
+    if (x == 0 || x == 1)
+        return 1;
 
-	memo[x] = (4 * hitung(x - 1) - hitung(x - 2)) % MOD;
-	
-	return memo[x] = (memo[x] < 0 ? memo[x] + MOD : memo[x]);
+    memo[x] = (4 * hitung(x - 1) - hitung(x - 2)) % MOD;
+
+    return memo[x] = (memo[x] < 0 ? memo[x] + MOD : memo[x]);
 }
 
-int main(){
-	int n;
+int main()
+{
+    int n;
 
-	memset(memo, -1, sizeof(memo));
+    memset(memo, -1, sizeof(memo));
 
-	cin >> n;
+    cin >> n;
 
-	cout << hitung(n + 1) << "\n";
+    cout << hitung(n + 1) << "\n";
 }

@@ -1,19 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-double panjang(double x1, double y1, double x2, double y2){
-	double x=abs(x2-x1); x*=x;
-	double y=abs(y2-y1); y*=y;
-	return sqrt(x+y);
+double panjang(double x1, double y1, double x2, double y2)
+{
+    double x = abs(x2 - x1);
+    x *= x;
+    double y = abs(y2 - y1);
+    y *= y;
+    return sqrt(x + y);
 }
 
-int main(){
-	double x1, x2, x3, y1, y2, y3;
-	scanf("%lf %lf %lf %lf %lf %lf", &x1, &y1, &x2, &y2, &x3, &y3);
-	double sisiMaks=max(panjang(x1, y1, x2, y2), panjang(x2, y2, x3, y3));
-	sisiMaks=max(sisiMaks, panjang(x3, y3, x1, y1));
-	double luas=abs(x1*y2+x2*y3+x3*y1-(x2*y1+x3*y2+x1*y3))/2;
-	printf("%.6lf\n", (2*luas)/sisiMaks);
+int main()
+{
+    double x1, x2, x3, y1, y2, y3;
+    scanf("%lf %lf %lf %lf %lf %lf", &x1, &y1, &x2, &y2, &x3, &y3);
+    double sisiMaks = max(panjang(x1, y1, x2, y2), panjang(x2, y2, x3, y3));
+    sisiMaks = max(sisiMaks, panjang(x3, y3, x1, y1));
+    double luas = abs(x1 * y2 + x2 * y3 + x3 * y1 - (x2 * y1 + x3 * y2 + x1 * y3)) / 2;
+    printf("%.6lf\n", (2 * luas) / sisiMaks);
 }
 
 /*

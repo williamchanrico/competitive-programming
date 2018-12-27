@@ -1,28 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	int N;
-	
-	while(scanf("%d", &N) && N != 0){
-		int inp;
-		int sum = 0;
-		int maxSum = 0;
+int main()
+{
+    int N;
 
-		for(int a = 0; a < N; a++){
-			scanf("%d", &inp);
+    while (scanf("%d", &N) && N != 0) {
+        int inp;
+        int sum = 0;
+        int maxSum = 0;
 
-			sum += inp;
-			sum = (sum < 0 ? 0 : sum);
-			
-			maxSum = max(maxSum, sum);
-		}
+        for (int a = 0; a < N; a++) {
+            scanf("%d", &inp);
 
-		if(maxSum > 0)
-			printf("The maximum winning streak is %d.\n", maxSum);
-		else
-			printf("Losing streak.\n");
-	}
+            sum += inp;
+            sum = (sum < 0 ? 0 : sum);
+
+            maxSum = max(maxSum, sum);
+        }
+
+        if (maxSum > 0)
+            printf("The maximum winning streak is %d.\n", maxSum);
+        else
+            printf("Losing streak.\n");
+    }
 }
 
 /* another form of Kadane's algorithm

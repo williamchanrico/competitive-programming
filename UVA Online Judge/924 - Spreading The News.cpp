@@ -3,60 +3,61 @@ using namespace std;
 
 #define INF 0x3f3f3f3f
 
-int main(){
-	int E, N, inp;
+int main()
+{
+    int E, N, inp;
 
-	scanf("%d", &E);
+    scanf("%d", &E);
 
-	vector<vector<int> > adjList(E);
+    vector<vector<int>> adjList(E);
 
-	for(int a = 0; a < E; a++){
+    for (int a = 0; a < E; a++) {
 
-		scanf("%d", &N);
+        scanf("%d", &N);
 
-		for(int b = 0; b < N; b++){
-			scanf("%d", &inp);
+        for (int b = 0; b < N; b++) {
+            scanf("%d", &inp);
 
-			adjList[a].push_back(inp);
-		}
-	}
+            adjList[a].push_back(inp);
+        }
+    }
 
-	scanf("%d", &N);
+    scanf("%d", &N);
 
-	while(N--){
-		int M = 0, D = 1, S;
-		queue<int> q;
-		vector<int> dist(E, INF);
+    while (N--) {
+        int M = 0, D = 1, S;
+        queue<int> q;
+        vector<int> dist(E, INF);
 
-		scanf("%d", &S);
+        scanf("%d", &S);
 
-		q.push(S);
+        q.push(S);
 
-		dist[S] = 0;
+        dist[S] = 0;
 
-		while(!q.empty()){
-			int u = q.front();
+        while (!q.empty()) {
+            int u = q.front();
 
-			q.pop();
+            q.pop();
 
-			for(int a = 0; a < adjList[u].size(); a++){
-				
-				if(dist[adjList[u][a]] == INF){
-					q.push(adjList[u][a]);
+            for (int a = 0; a < adjList[u].size(); a++) {
 
-					dist[adjList[u][a]] = dist[u] + 1;
-				}
-			}
+                if (dist[adjList[u][a]] == INF) {
+                    q.push(adjList[u][a]);
 
-			if(q.size() > M && dist[q.front()] == (dist[u] + 1)){
-				M = q.size();
-				D = dist[u] + 1;
-			}
-		}
+                    dist[adjList[u][a]] = dist[u] + 1;
+                }
+            }
 
-		if(M == 0)
-			printf("0\n");
-		else
-			printf("%d %d\n", M, D);
-	}
+            if (q.size() > M && dist[q.front()] == (dist[u] + 1)) {
+                M = q.size();
+                D = dist[u] + 1;
+            }
+        }
+
+        if (M == 0)
+            printf("0\n");
+        else
+            printf("%d %d\n", M, D);
+    }
 }

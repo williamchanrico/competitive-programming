@@ -3,110 +3,114 @@ using namespace std;
 
 #define INF 0x3f3f3f3f
 
-class UnionFind{
+class UnionFind {
 private:
-	int numSet;
-	vector<int> rank, p, setSize;
+    int numSet;
+    vector<int> rank, p, setSize;
 
 public:
-	UnionFind(){}
+    UnionFind() {}
 
-	UnionFind(int x){
-		p.assign(x, 0);
-		rank.assign(x, 0);
-		setSize.assign(x, 1);
+    UnionFind(int x)
+    {
+        p.assign(x, 0);
+        rank.assign(x, 0);
+        setSize.assign(x, 1);
 
-		numSet = x;
+        numSet = x;
 
-		for(int a = 0; a < x; a++)
-			p[a] = a;
-	}
+        for (int a = 0; a < x; a++)
+            p[a] = a;
+    }
 
-	int findSet(int x){ return (x == p[x] ? x : findSet(p[x])); }
+    int findSet(int x) { return (x == p[x] ? x : findSet(p[x])); }
 
-	bool isSameSet(int x, int y){ return (findSet(x) == findSet(y)); }
+    bool isSameSet(int x, int y) { return (findSet(x) == findSet(y)); }
 
-	void unionSet(int x, int y){
-		if(!isSameSet(x, y)){
-			int A = findSet(x);
-			int B = findSet(y);
+    void unionSet(int x, int y)
+    {
+        if (!isSameSet(x, y)) {
+            int A = findSet(x);
+            int B = findSet(y);
 
-			if(rank[A] < rank[B]){
-				p[A] = B;
-				setSize[B] += setSize[A];
-			}else{
-				p[B] = A;
-				setSize[A] += setSize[B];
+            if (rank[A] < rank[B]) {
+                p[A] = B;
+                setSize[B] += setSize[A];
+            } else {
+                p[B] = A;
+                setSize[A] += setSize[B];
 
-				if(rank[A] == rank[B])
-					rank[A]++;
-			}
+                if (rank[A] == rank[B])
+                    rank[A]++;
+            }
 
-			--numSet;
-		}
-	}
+            --numSet;
+        }
+    }
 
-	int sizeOfSet(int x){ return setSize[findSet(x)]; }
+    int sizeOfSet(int x) { return setSize[findSet(x)]; }
 
-	int numOfSet(){ return numSet; }
+    int numOfSet() { return numSet; }
 };
 
 int N, M;
-vector<pair<int, pair<int, int> > > edgeList;
+vector<pair<int, pair<int, int>>> edgeList;
 
-pair<int, vector<int> > mst(int flag = -1){
-	int mst = 0;
-	UnionFind UF(N);
-	vector<int> usedEdge;
+pair<int, vector<int>> mst(int flag = -1)
+{
+    int mst = 0;
+    UnionFind UF(N);
+    vector<int> usedEdge;
 
-	for(int a = 0; a < edgeList.size(); a++){
-		int W = edgeList[a].first;
-		pair<int, int> V = edgeList[a].second;
+    for (int a = 0; a < edgeList.size(); a++) {
+        int W = edgeList[a].first;
+        pair<int, int> V = edgeList[a].second;
 
-		if(a == flag || a == flag)
-			continue;
+        if (a == flag || a == flag)
+            continue;
 
-		if(!UF.isSameSet(V.first, V.second)){
-			UF.unionSet(V.first, V.second);
-			usedEdge.push_back(a);
-			mst += W;
-		}
-	}
-	
-	if(UF.numOfSet() != 1)
-		mst = INF;
+        if (!UF.isSameSet(V.first, V.second)) {
+            UF.unionSet(V.first, V.second);
+            usedEdge.push_back(a);
+            mst += W;
+        }
+    }
 
-	return make_pair(mst, usedEdge);
+    if (UF.numOfSet() != 1)
+        mst = INF;
+
+    return make_pair(mst, usedEdge);
 }
 
-int main(){
-	int TC;
+int main()
+{
+    int TC;
 
-	scanf("%d", &TC);
+    scanf("%d", &TC);
 
-	while(TC--){
-		scanf("%d %d", &N, &M);
-		
-		edgeList.clear();
+    while (TC--) {
+        scanf("%d %d", &N, &M);
 
-		for(int a = 0; a < M; a++){
-			int A, B, C;
+        edgeList.clear();
 
-			scanf("%d %d %d", &A, &B, &C);
+        for (int a = 0; a < M; a++) {
+            int A, B, C;
 
-			edgeList.push_back(make_pair(C, make_pair(A - 1, B - 1)));
-		}
+            scanf("%d %d %d", &A, &B, &C);
 
-		sort(edgeList.begin(), edgeList.end());
+            edgeList.push_back(make_pair(C, make_pair(A - 1, B - 1)));
+        }
 
-		pair<int, vector<int> > ans1 = mst(), ans2 = make_pair(INF, vector<int>());
+        sort(edgeList.begin(), edgeList.end());
 
-		for(int a = 0; a < ans1.second.size(); a++){
-			pair<int, vector<int> > temp = mst(ans1.second[a]);
+        pair<int, vector<int>> ans1 = mst(), ans2 = make_pair(INF, vector<int>());
 
-			ans2 = (temp.first < ans2.first ? temp : ans2);
-		}
+        for (int a = 0; a < ans1.second.size(); a++) {
+            pair<int, vector<int>> temp = mst(ans1.second[a]);
 
-		printf("%d %d\n", ans1.first, ans2.first);
-	}
+            ans2 = (temp.first < ans2.first ? temp : ans2);
+        }
+
+        printf("%d %d\n", ans1.first, ans2.first);
+    }
 }

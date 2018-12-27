@@ -1,28 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-	char word[20];
-	int M, N, value;
-	map<string, int> m;
+int main()
+{
+    char word[20];
+    int M, N, value;
+    map<string, int> m;
 
-	scanf("%d %d", &M, &N);
+    scanf("%d %d", &M, &N);
 
-	for(int a = 0; a < M; a++){
-		scanf("%s %d", word, &value);
+    for (int a = 0; a < M; a++) {
+        scanf("%s %d", word, &value);
 
-		m[word] = value;
-	}
+        m[word] = value;
+    }
 
-	for(int a = 0; a < N; a++){
-		int ans = 0;
+    for (int a = 0; a < N; a++) {
+        int ans = 0;
 
-		while(scanf("%s", word), word[0] != '.'){
-			ans += m[word];
-		}
+        while (scanf("%s", word), word[0] != '.') {
+            ans += m[word];
+        }
 
-		printf("%d\n", ans);
-	}
+        printf("%d\n", ans);
+    }
 }
 
 /*

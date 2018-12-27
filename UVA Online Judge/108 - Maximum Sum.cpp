@@ -5,33 +5,35 @@ using namespace std;
 
 int memo[110][110];
 
-int dp(int N){
-	int maxSum = -INF;
+int dp(int N)
+{
+    int maxSum = -INF;
 
-	for(int a = 1; a <= N; a++)
-		for(int b = 1; b <= N; b++)
-			for(int c = a + 1; c <= N; c++)
-				for(int d = b + 1; d <= N; d++)
-					maxSum = max(maxSum, 
-						memo[c][d] - memo[a - 1][d] - memo[c][b - 1] + memo[a - 1][b - 1]);
+    for (int a = 1; a <= N; a++)
+        for (int b = 1; b <= N; b++)
+            for (int c = a + 1; c <= N; c++)
+                for (int d = b + 1; d <= N; d++)
+                    maxSum = max(maxSum,
+                        memo[c][d] - memo[a - 1][d] - memo[c][b - 1] + memo[a - 1][b - 1]);
 
-	return maxSum;
+    return maxSum;
 }
 
-int main(){
-	int N;
+int main()
+{
+    int N;
 
-	memset(memo, 0, sizeof(memo));
+    memset(memo, 0, sizeof(memo));
 
-	scanf("%d", &N);
+    scanf("%d", &N);
 
-	for(int a = 1; a <= N; a++){
-		for(int b = 1; b <= N; b++){
-			scanf("%d", &memo[a][b]);
+    for (int a = 1; a <= N; a++) {
+        for (int b = 1; b <= N; b++) {
+            scanf("%d", &memo[a][b]);
 
-			memo[a][b] += memo[a - 1][b] + memo[a][b - 1] - memo[a - 1][b - 1];
-		}
-	}
+            memo[a][b] += memo[a - 1][b] + memo[a][b - 1] - memo[a - 1][b - 1];
+        }
+    }
 
-	printf("%d\n", dp(N));
+    printf("%d\n", dp(N));
 }

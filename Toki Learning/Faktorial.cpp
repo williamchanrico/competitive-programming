@@ -1,12 +1,13 @@
 #include <stdio.h>
 
-int n, ans=0;
+int n, ans = 0;
 
-int main(){
-	scanf("%d", &n);
-	for(int a=5;a<=n;a*=5)
-		ans+=n/a;
-	printf("%d\n", ans);
+int main()
+{
+    scanf("%d", &n);
+    for (int a = 5; a <= n; a *= 5)
+        ans += n / a;
+    printf("%d\n", ans);
 }
 
 /*

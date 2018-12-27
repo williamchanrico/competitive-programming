@@ -3,86 +3,89 @@ using namespace std;
 
 #define INF 0x3f3f3f3f
 
-bool valid(const string &x, const string &y){
-	bool ret = false;
+bool valid(const string& x, const string& y)
+{
+    bool ret = false;
 
-	if(x.size() != y.size())
-		return false;
+    if (x.size() != y.size())
+        return false;
 
-	for(int a = 0; a < x.size(); a++)
-		if(x[a] != y[a])
-			if(!ret)
-				ret = true;
-			else
-				return false;
+    for (int a = 0; a < x.size(); a++)
+        if (x[a] != y[a])
+            if (!ret)
+                ret = true;
+            else
+                return false;
 
-	return true;
+    return true;
 }
 
-int main(){
-	int T;
+int main()
+{
+    int T;
 
-	cin >> T;
+    cin >> T;
 
-	while(T--){
-		string str;
-		map<string, int> m;
-		vector<string> dict;
-		vector<vector<int> > adjList(210);
+    while (T--) {
+        string str;
+        map<string, int> m;
+        vector<string> dict;
+        vector<vector<int>> adjList(210);
 
-		while(cin >> str, str[0] != '*'){
-			dict.push_back(str);
+        while (cin >> str, str[0] != '*') {
+            dict.push_back(str);
 
-			m[str] = dict.size() - 1;
-			
-			for(int a = 0; a < (dict.size() - 1); a++){
-				if(valid(str, dict[a])){
-					adjList[a].push_back(m[str]);
-					adjList[m[str]].push_back(a);
-				}
-			}
-		}
+            m[str] = dict.size() - 1;
 
-		cin.ignore(INT_MAX, '\n');
+            for (int a = 0; a < (dict.size() - 1); a++) {
+                if (valid(str, dict[a])) {
+                    adjList[a].push_back(m[str]);
+                    adjList[m[str]].push_back(a);
+                }
+            }
+        }
 
-		while(getline(cin, str), str != ""){
-			string w1, w2;
-			stringstream ss(str);
+        cin.ignore(INT_MAX, '\n');
 
-			ss >> w1 >> w2;
+        while (getline(cin, str), str != "") {
+            string w1, w2;
+            stringstream ss(str);
 
-			int start = m[w1], end = m[w2];
+            ss >> w1 >> w2;
 
-			queue<int> q;
-			vector<int> dist(dict.size(), INF);
+            int start = m[w1], end = m[w2];
 
-			dist[start] = 0;
+            queue<int> q;
+            vector<int> dist(dict.size(), INF);
 
-			q.push(start);
+            dist[start] = 0;
 
-			while(!q.empty()){
-				int u = q.front();
+            q.push(start);
 
-				q.pop();
+            while (!q.empty()) {
+                int u = q.front();
 
-				for(int a = 0; a < adjList[u].size(); a++){
-					if(dist[adjList[u][a]] == INF){
-						q.push(adjList[u][a]);
+                q.pop();
 
-						dist[adjList[u][a]] = dist[u] + 1;
+                for (int a = 0; a < adjList[u].size(); a++) {
+                    if (dist[adjList[u][a]] == INF) {
+                        q.push(adjList[u][a]);
 
-						if(adjList[u][a] == end){
-							queue<int>().swap(q);
+                        dist[adjList[u][a]] = dist[u] + 1;
 
-							break;
-						}
-					}
-				}
-			}
+                        if (adjList[u][a] == end) {
+                            queue<int>().swap(q);
 
-			cout << w1 << " " << w2 << " " << dist[end] << "\n";
-		}
+                            break;
+                        }
+                    }
+                }
+            }
 
-		if(T) cout << "\n";
-	}
+            cout << w1 << " " << w2 << " " << dist[end] << "\n";
+        }
+
+        if (T)
+            cout << "\n";
+    }
 }
