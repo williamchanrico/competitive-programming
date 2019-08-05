@@ -15,7 +15,7 @@ int main()
 
     int ans = 0;
     for (auto it = m.begin(); it != m.end(); it++) {
-        ans += abs(it->second - 0);
+        ans += abs(it->second);
     }
     printf("%d\n", ans);
 }
